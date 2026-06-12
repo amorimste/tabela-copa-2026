@@ -156,16 +156,58 @@ main{padding:16px;max-width:1400px;margin:0 auto}
 .btn-reset{background:linear-gradient(135deg,#7F1D1D,#B91C1C);border:1px solid #EF4444;color:#fff;padding:10px 24px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;transition:all .2s}
 .btn-reset:hover{background:#B91C1C;box-shadow:0 0 20px rgba(239,68,68,.3)}
 
+/* ── TODAY TAB ── */
+.today-day-block{margin-bottom:22px}
+.today-day-block.is-today .today-day-header{background:rgba(233,30,140,.08);border:1px solid rgba(233,30,140,.3);border-radius:10px;padding:8px 14px}
+.today-day-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;padding:4px 0}
+.today-day-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);letter-spacing:1px;text-transform:capitalize}
+.today-tag{font-size:.68rem;padding:3px 10px;border-radius:12px;font-weight:700;white-space:nowrap}
+.today-tag-live{background:var(--magenta);color:#fff;animation:pulse 2s infinite}
+.today-tag-tmrw{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.3)}
+.today-tag-past{background:rgba(255,255,255,.07);color:var(--gray-mid)}
+.today-matches-list{display:flex;flex-direction:column;gap:8px}
+.today-match{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;transition:border-color .2s}
+.today-match:hover{border-color:rgba(255,255,255,.2)}
+.today-match.br-match{border-color:var(--gold);background:rgba(201,168,76,.05)}
+.today-match-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.today-time{color:var(--gold);font-size:.75rem;font-weight:700}
+.today-comp{background:rgba(255,255,255,.07);color:var(--gray-mid);font-size:.68rem;padding:2px 8px;border-radius:6px;font-weight:600}
+.today-city{color:var(--gray-mid);font-size:.68rem}
+.today-match-line{display:flex;align-items:center;gap:10px}
+.today-team{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.today-team.home{justify-content:flex-end;flex-direction:row-reverse}
+.today-tname{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.today-score-box{font-size:1.25rem;font-weight:800;color:var(--gold);background:rgba(201,168,76,.12);padding:5px 14px;border-radius:8px;min-width:70px;text-align:center;flex-shrink:0;letter-spacing:2px}
+.today-score-ph{font-size:.85rem;color:var(--gray-mid);min-width:50px;text-align:center;flex-shrink:0}
+
 /* ── RESPONSIVE ── */
-@media(max-width:600px){
+@media(max-width:640px){
+  main{padding:8px}
+  .card{padding:10px}
   .groups-grid{grid-template-columns:1fr}
-  .team-name-text{font-size:.76rem}
-  .team-flag-big{font-size:1.4rem}
-  nav{padding:0 4px}
-  .nav-btn{padding:12px 10px;font-size:.76rem}
+  .ko-grid{grid-template-columns:1fr}
+  .thirds-grid{grid-template-columns:1fr}
+  nav{padding:0 2px}
+  .nav-btn{padding:11px 9px;font-size:.74rem}
+  .brasil-banner{margin:8px;padding:10px 14px;gap:10px}
+  .match-line{gap:5px}
+  .team-name-text{font-size:.74rem;white-space:normal;word-break:break-word}
+  .score-display{font-size:.95rem;padding:3px 8px;min-width:52px}
+  .score-input{width:34px;height:30px;font-size:.9rem}
+  .card-title{font-size:1.2rem}
+  .today-tname{font-size:.8rem}
+  .today-score-box{font-size:1.1rem;padding:4px 10px;min-width:60px}
 }
 @media(max-width:420px){
-  .standings-table th:nth-child(n+7),.standings-table td:nth-child(n+7){display:none}
+  .standings-table th:nth-child(n+6),.standings-table td:nth-child(n+6){display:none}
+  .match-line{flex-wrap:wrap;justify-content:center;gap:4px}
+  .team-side{flex:none;width:calc(50% - 44px)}
+  .team-side.home{justify-content:flex-end}
+  .team-side.away{justify-content:flex-start}
+  .score-area,.score-display{order:0}
+  .today-match-line{flex-wrap:wrap;justify-content:center;gap:6px}
+  .today-team{width:calc(50% - 40px);flex:none}
+  .today-team.home{justify-content:flex-end;flex-direction:row-reverse}
 }
 </style>
 </head>
@@ -188,6 +230,7 @@ main{padding:16px;max-width:1400px;margin:0 auto}
 </div>
 
 <nav>
+  <button class="nav-btn" onclick="showTab('hoje',this)">📅 Hoje</button>
   <button class="nav-btn active" onclick="showTab('grupos',this)">Fase de Grupos</button>
   <button class="nav-btn" onclick="showTab('melhores3',this)">Melhores 3ºs</button>
   <button class="nav-btn" onclick="showTab('r32',this)">Rodada de 32</button>
@@ -249,6 +292,10 @@ main{padding:16px;max-width:1400px;margin:0 auto}
   <div class="tab-content" id="tab-final">
     <div class="info-box"><strong>Final e 3º Lugar</strong> — 18 e 19 de julho.</div>
     <div id="finalContainer"></div>
+  </div>
+
+  <div class="tab-content" id="tab-hoje">
+    <div id="hojeContainer"></div>
   </div>
 </main>
 
@@ -882,12 +929,133 @@ function resetAll() {
 // ─────────────────────────────────────────────
 // TABS
 // ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// ABA HOJE
+// ─────────────────────────────────────────────
+function parseDM(dateStr) {
+  // "11/06 Qui" → Date(2026, 5, 11)
+  const dm = dateStr.split(' ')[0];
+  const [d, m] = dm.split('/').map(Number);
+  return new Date(2026, m - 1, d);
+}
+
+function renderTodayTab() {
+  const container = document.getElementById('hojeContainer');
+  const now = new Date();
+  const todayNorm = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const MS_DAY = 86400000;
+
+  // Coletar todos os jogos
+  const allMatches = [];
+
+  GROUP_MATCHES.forEach(m => {
+    allMatches.push({
+      d: parseDM(m.date), time: m.time,
+      home: m.home, away: m.away,
+      city: m.city, id: m.id,
+      label: GROUPS[m.g].name, type: 'group'
+    });
+  });
+
+  Object.values(KO_ROUNDS).forEach(round => {
+    round.matches.forEach(m => {
+      allMatches.push({
+        d: parseDM(m.date), time: m.time,
+        home: koTeamName(m.id,'home',m.hl),
+        away: koTeamName(m.id,'away',m.al),
+        city: m.city, id: m.id,
+        label: round.label, type: 'ko'
+      });
+    });
+  });
+
+  // Agrupar por data
+  const byDate = {};
+  allMatches.forEach(m => {
+    const key = m.d.toISOString().split('T')[0];
+    if (!byDate[key]) byDate[key] = { d: m.d, matches: [] };
+    byDate[key].matches.push(m);
+  });
+
+  // Ordenar datas
+  const sorted = Object.values(byDate).sort((a,b) => a.d - b.d);
+
+  // Mostrar: 3 dias passados, hoje e próximos 6 dias
+  const visible = sorted.filter(day => {
+    const diff = Math.round((day.d - todayNorm) / MS_DAY);
+    return diff >= -3 && diff <= 6;
+  });
+
+  if (!visible.length) {
+    container.innerHTML = `<div class="info-box">Nenhum jogo neste período.</div>`;
+    return;
+  }
+
+  let html = '';
+
+  visible.forEach(dayData => {
+    const diff = Math.round((dayData.d - todayNorm) / MS_DAY);
+    const isToday = diff === 0;
+    const isPast  = diff < 0;
+
+    const dayFmt = dayData.d.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
+
+    let badge = '';
+    if (isToday)       badge = `<span class="today-tag today-tag-live">🔴 HOJE</span>`;
+    else if (diff===1) badge = `<span class="today-tag today-tag-tmrw">📅 AMANHÃ</span>`;
+    else if (isPast)   badge = `<span class="today-tag today-tag-past">${Math.abs(diff)}d atrás</span>`;
+
+    html += `<div class="today-day-block${isToday?' is-today':''}">
+      <div class="today-day-header">
+        <span class="today-day-name">${dayFmt}</span>${badge}
+      </div>
+      <div class="today-matches-list">`;
+
+    // Ordenar por horário
+    dayData.matches.sort((a,b) => (parseInt(a.time)||0) - (parseInt(b.time)||0));
+
+    dayData.matches.forEach(m => {
+      const r  = m.type==='group' ? results[m.id] : koResults[m.id];
+      const hasR = r && r.home !== undefined && r.away !== undefined;
+      const isBr = m.home==='Brasil' || m.away==='Brasil';
+
+      const scoreBlock = hasR
+        ? `<span class="today-score-box">${r.home} × ${r.away}</span>`
+        : `<span class="today-score-ph">${isToday||isPast ? '— × —' : m.time}</span>`;
+
+      html += `<div class="today-match${isBr?' br-match':''}">
+        <div class="today-match-meta">
+          <span class="today-time">🕐 ${m.time}</span>
+          <span class="today-comp">${m.label}</span>
+          <span class="today-city">📍 ${m.city}</span>
+        </div>
+        <div class="today-match-line">
+          <div class="today-team home">
+            <span class="today-tname">${m.home}</span>
+            ${flag(m.home, true)}
+          </div>
+          ${scoreBlock}
+          <div class="today-team away">
+            ${flag(m.away, true)}
+            <span class="today-tname">${m.away}</span>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+}
+
 function showTab(name, btn) {
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
-  if(name==='melhores3') renderThirds();
+  if(name==='hoje')       renderTodayTab();
+  else if(name==='melhores3') renderThirds();
   else if(name==='r32')    renderKoRound('r32','r32Container');
   else if(name==='oitavas') renderKoRound('oitavas','oitavasContainer');
   else if(name==='quartas') renderKoRound('quartas','quartasContainer');
@@ -912,6 +1080,7 @@ function refreshAll() {
       case 'tab-quartas': renderKoRound('quartas','quartasContainer'); break;
       case 'tab-semis':   renderKoRound('semis','semisContainer'); break;
       case 'tab-final':   renderFinalTab(); break;
+      case 'tab-hoje':    renderTodayTab(); break;
     }
   }
 }
