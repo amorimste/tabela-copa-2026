@@ -200,14 +200,13 @@ main{padding:16px;max-width:1400px;margin:0 auto}
 }
 @media(max-width:420px){
   .standings-table th:nth-child(n+6),.standings-table td:nth-child(n+6){display:none}
-  .match-line{flex-wrap:wrap;justify-content:center;gap:4px}
-  .team-side{flex:none;width:calc(50% - 44px)}
-  .team-side.home{justify-content:flex-end}
-  .team-side.away{justify-content:flex-start}
-  .score-area,.score-display{order:0}
-  .today-match-line{flex-wrap:wrap;justify-content:center;gap:6px}
-  .today-team{width:calc(50% - 40px);flex:none}
-  .today-team.home{justify-content:flex-end;flex-direction:row-reverse}
+  .match-line{gap:3px}
+  .team-side{min-width:0;flex:1}
+  .team-name-text{font-size:.68rem;word-break:break-word}
+  .score-input{width:30px;height:28px;font-size:.82rem;padding:0}
+  .score-display{font-size:.85rem;padding:2px 6px;min-width:44px}
+  .score-sep{font-size:.85rem}
+  .fi{font-size:1.1rem !important}
 }
 </style>
 </head>
