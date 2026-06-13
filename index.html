@@ -179,6 +179,15 @@ main{padding:16px;max-width:1400px;margin:0 auto}
 .today-tname{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .today-score-box{font-size:1.25rem;font-weight:800;color:var(--gold);background:rgba(201,168,76,.12);padding:5px 14px;border-radius:8px;min-width:70px;text-align:center;flex-shrink:0;letter-spacing:2px}
 .today-score-ph{font-size:.85rem;color:var(--gray-mid);min-width:50px;text-align:center;flex-shrink:0}
+.today-tv{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.today-tv-label{font-size:.65rem;color:var(--gray-mid);font-weight:600;letter-spacing:.5px;margin-right:2px}
+.tv-badge{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;text-decoration:none;cursor:default}
+.tv-badge[href]{cursor:pointer}
+.tv-badge[href]:hover{opacity:.8}
+.tv-globo{background:#009c3b;color:#fff}
+.tv-sbt{background:#1a3ca8;color:#fff}
+.tv-sportv{background:#1a1a2e;color:#e0b060;border:1px solid #e0b060}
+.tv-caze{background:#ff0000;color:#fff}
 
 /* ── RESPONSIVE ── */
 @media(max-width:640px){
@@ -350,7 +359,7 @@ const GROUP_MATCHES = [
 {id:'A2R1',g:'A',date:'11/06 Qui',time:'23h',home:'Coreia do Sul',away:'Rep. Tcheca',city:'Guadalajara',round:1},
 {id:'B1R1',g:'B',date:'12/06 Sex',time:'16h',home:'Canadá',away:'Bósnia-Herzegovina',city:'Toronto',round:1},
 {id:'D1R1',g:'D',date:'12/06 Sex',time:'22h',home:'Estados Unidos',away:'Paraguai',city:'Los Angeles',round:1},
-{id:'D2R1',g:'D',date:'13/06 Sáb',time:'01h',home:'Austrália',away:'Turquia',city:'Vancouver',round:1},
+{id:'D2R1',g:'D',date:'14/06 Dom',time:'01h',home:'Austrália',away:'Turquia',city:'Vancouver',round:1},
 {id:'B2R1',g:'B',date:'13/06 Sáb',time:'16h',home:'Catar',away:'Suíça',city:'San Francisco',round:1},
 {id:'C1R1',g:'C',date:'13/06 Sáb',time:'19h',home:'Brasil',away:'Marrocos',city:'Nova York/NJ',round:1},
 {id:'C2R1',g:'C',date:'13/06 Sáb',time:'22h',home:'Haiti',away:'Escócia',city:'Boston',round:1},
@@ -362,7 +371,7 @@ const GROUP_MATCHES = [
 {id:'G1R1',g:'G',date:'15/06 Seg',time:'16h',home:'Bélgica',away:'Egito',city:'Seattle',round:1},
 {id:'H2R1',g:'H',date:'15/06 Seg',time:'19h',home:'Arábia Saudita',away:'Uruguai',city:'Miami',round:1},
 {id:'G2R1',g:'G',date:'15/06 Seg',time:'22h',home:'Irã',away:'Nova Zelândia',city:'Los Angeles',round:1},
-{id:'J1R1',g:'J',date:'16/06 Ter',time:'14h',home:'Argentina',away:'Argélia',city:'Kansas City',round:1},
+{id:'J1R1',g:'J',date:'16/06 Ter',time:'22h',home:'Argentina',away:'Argélia',city:'Kansas City',round:1},
 {id:'I1R1',g:'I',date:'16/06 Ter',time:'16h',home:'França',away:'Senegal',city:'Nova York/NJ',round:1},
 {id:'I2R1',g:'I',date:'16/06 Ter',time:'19h',home:'Iraque',away:'Noruega',city:'Boston',round:1},
 {id:'J2R1',g:'J',date:'17/06 Qua',time:'01h',home:'Áustria',away:'Jordânia',city:'San Francisco',round:1},
@@ -375,10 +384,10 @@ const GROUP_MATCHES = [
 {id:'B1R2',g:'B',date:'18/06 Qui',time:'16h',home:'Suíça',away:'Bósnia-Herzegovina',city:'Los Angeles',round:2},
 {id:'B2R2',g:'B',date:'18/06 Qui',time:'19h',home:'Canadá',away:'Catar',city:'Vancouver',round:2},
 {id:'A2R2',g:'A',date:'18/06 Qui',time:'22h',home:'México',away:'Coreia do Sul',city:'Guadalajara',round:2},
-{id:'D1R2',g:'D',date:'19/06 Sex',time:'01h',home:'Turquia',away:'Paraguai',city:'San Francisco',round:2},
+{id:'D1R2',g:'D',date:'20/06 Sáb',time:'00h',home:'Turquia',away:'Paraguai',city:'San Francisco',round:2},
 {id:'D2R2',g:'D',date:'19/06 Sex',time:'16h',home:'Estados Unidos',away:'Austrália',city:'Seattle',round:2},
 {id:'C1R2',g:'C',date:'19/06 Sex',time:'19h',home:'Escócia',away:'Marrocos',city:'Boston',round:2},
-{id:'C2R2',g:'C',date:'19/06 Sex',time:'22h',home:'Brasil',away:'Haiti',city:'Filadélfia',round:2},
+{id:'C2R2',g:'C',date:'19/06 Sex',time:'21h30',home:'Brasil',away:'Haiti',city:'Filadélfia',round:2},
 {id:'F1R2',g:'F',date:'20/06 Sáb',time:'14h',home:'Holanda',away:'Suécia',city:'Houston',round:2},
 {id:'E1R2',g:'E',date:'20/06 Sáb',time:'17h',home:'Alemanha',away:'Costa do Marfim',city:'Toronto',round:2},
 {id:'E2R2',g:'E',date:'20/06 Sáb',time:'21h',home:'Equador',away:'Curaçao',city:'Kansas City',round:2},
@@ -471,6 +480,60 @@ const KO_ROUNDS = {
     {id:'FINAL_1',date:'19/07 Sáb',time:'16h',city:'Nova York/NJ — MetLife Stadium',hl:'Vencedor Semi 1',al:'Vencedor Semi 2'},
   ]}
 };
+
+// ─────────────────────────────────────────────
+// TRANSMISSÃO — jogos confirmados na Globo/SBT
+// Fonte: goal.com/br + lance.com.br (jun/2026)
+// CazéTV (YouTube) transmite TODOS os 104 jogos
+// ─────────────────────────────────────────────
+const GLOBO_GAMES = new Set([
+  'A1R1',  // México × África do Sul
+  'D1R1',  // EUA × Paraguai
+  'C1R1',  // Brasil × Marrocos
+  'F1R1',  // Holanda × Japão
+  'H2R1',  // Arábia Saudita × Uruguai
+  'I1R1',  // França × Senegal
+  'L1R1',  // Inglaterra × Croácia
+  'B1R2',  // Suíça × Bósnia-Herzegovina
+  'C2R2',  // Brasil × Haiti
+  'E1R2',  // Alemanha × Costa do Marfim
+  'J1R2',  // Argentina × Áustria
+  'L1R2',  // Inglaterra × Gana
+  'C1R3',  // Escócia × Brasil
+]);
+
+function getTVChannels(matchId, type) {
+  const channels = [];
+  if (type === 'ko' || GLOBO_GAMES.has(matchId)) {
+    channels.push({name:'Globo', cls:'tv-globo'});
+    channels.push({name:'SBT',   cls:'tv-sbt'});
+  }
+  channels.push({name:'SporTV', cls:'tv-sportv'});
+  channels.push({name:'CazéTV', cls:'tv-caze', link:'https://www.youtube.com/@CazéTV'});
+  return channels;
+}
+
+// ─────────────────────────────────────────────
+// CHAVEAMENTO R32 (posições dos grupos)
+// ─────────────────────────────────────────────
+const R32_BRACKET = [
+  {id:'R32_1',  h:'2A', a:'2B'},
+  {id:'R32_2',  h:'1E', a:'3*'},
+  {id:'R32_3',  h:'1F', a:'2C'},
+  {id:'R32_4',  h:'1C', a:'2F'},
+  {id:'R32_5',  h:'1I', a:'3*'},
+  {id:'R32_6',  h:'2E', a:'2I'},
+  {id:'R32_7',  h:'1A', a:'3*'},
+  {id:'R32_8',  h:'1L', a:'3*'},
+  {id:'R32_9',  h:'1D', a:'3*'},
+  {id:'R32_10', h:'1G', a:'3*'},
+  {id:'R32_11', h:'2K', a:'2L'},
+  {id:'R32_12', h:'1H', a:'2J'},
+  {id:'R32_13', h:'1B', a:'3*'},
+  {id:'R32_14', h:'1J', a:'2H'},
+  {id:'R32_15', h:'1K', a:'3*'},
+  {id:'R32_16', h:'2D', a:'2G'},
+];
 
 // ─────────────────────────────────────────────
 // ESTADO
@@ -721,9 +784,68 @@ function renderThirds() {
 // Guarda ID do jogo pendente para vincular ao botão salvar
 let _pendingKo = null;
 
+// Resolve a posição do grupo ("1A", "2B") para o nome real do time
+function resolveGroupPos(pos) {
+  if (!pos || pos === '3*') return null;
+  const rank = parseInt(pos[0]) - 1;
+  const grp = pos.slice(1);
+  const st = calcStandings(grp);
+  if (!st || st.length <= rank) return null;
+  return st[rank].team;
+}
+
+// Retorna o perdedor de uma semifinal (para jogo do 3º lugar)
+function koSemiLoser(semiId) {
+  const kr = koResults[semiId];
+  if (!kr || kr.home === undefined || !kr.winner) return null;
+  return kr.winner === kr.homeTeam ? kr.awayTeam : kr.homeTeam;
+}
+
+// Auto-resolve o nome do time para qualquer slot do mata-mata
+function resolveKoTeam(id, side) {
+  // R32 — baseado nas posições dos grupos
+  const r32slot = R32_BRACKET.find(s => s.id === id);
+  if (r32slot) {
+    return resolveGroupPos(side === 'home' ? r32slot.h : r32slot.a);
+  }
+  // Oitavas — vencedor dos pares R32 (1-2, 3-4, 5-6, 7-8, 9-10, 11-12, 13-14, 15-16)
+  const oi = KO_ROUNDS.oitavas.matches.findIndex(m => m.id === id);
+  if (oi !== -1) {
+    const src = `R32_${oi*2 + (side==='home'?1:2)}`;
+    const kr = koResults[src];
+    return kr && kr.winner ? kr.winner : null;
+  }
+  // Quartas — vencedor dos pares de Oitavas
+  const qi = KO_ROUNDS.quartas.matches.findIndex(m => m.id === id);
+  if (qi !== -1) {
+    const src = `OIT_${qi*2 + (side==='home'?1:2)}`;
+    const kr = koResults[src];
+    return kr && kr.winner ? kr.winner : null;
+  }
+  // Semifinais — vencedor dos pares de Quartas
+  const si = KO_ROUNDS.semis.matches.findIndex(m => m.id === id);
+  if (si !== -1) {
+    const src = `QRT_${si*2 + (side==='home'?1:2)}`;
+    const kr = koResults[src];
+    return kr && kr.winner ? kr.winner : null;
+  }
+  // Final — vencedor das semis
+  if (id === 'FINAL_1') {
+    const kr = koResults[side==='home' ? 'SEMI_1' : 'SEMI_2'];
+    return kr && kr.winner ? kr.winner : null;
+  }
+  // 3º Lugar — perdedor das semis
+  if (id === 'TERC_1') {
+    return koSemiLoser(side==='home' ? 'SEMI_1' : 'SEMI_2');
+  }
+  return null;
+}
+
 function koTeamName(id, side, fallback) {
   const r = koResults[id];
   if (r && r[side+'Team']) return r[side+'Team'];
+  const auto = resolveKoTeam(id, side);
+  if (auto) return auto;
   return fallback;
 }
 function isPlaceholder(name) {
@@ -982,7 +1104,7 @@ function renderTodayTab() {
   // Mostrar: 3 dias passados, hoje e próximos 6 dias
   const visible = sorted.filter(day => {
     const diff = Math.round((day.d - todayNorm) / MS_DAY);
-    return diff >= -3 && diff <= 6;
+    return diff >= 0 && diff <= 10;
   });
 
   if (!visible.length) {
@@ -1022,6 +1144,13 @@ function renderTodayTab() {
         ? `<span class="today-score-box">${r.home} × ${r.away}</span>`
         : `<span class="today-score-ph">${isToday||isPast ? '— × —' : m.time}</span>`;
 
+      const tvChannels = getTVChannels(m.id, m.type);
+      const tvHtml = tvChannels.map(ch =>
+        ch.link
+          ? `<a class="tv-badge ${ch.cls}" href="${ch.link}" target="_blank" rel="noopener">▶ ${ch.name}</a>`
+          : `<span class="tv-badge ${ch.cls}">📺 ${ch.name}</span>`
+      ).join('');
+
       html += `<div class="today-match${isBr?' br-match':''}">
         <div class="today-match-meta">
           <span class="today-time">🕐 ${m.time}</span>
@@ -1038,6 +1167,9 @@ function renderTodayTab() {
             ${flag(m.away, true)}
             <span class="today-tname">${m.away}</span>
           </div>
+        </div>
+        <div class="today-tv">
+          <span class="today-tv-label">VER EM:</span>${tvHtml}
         </div>
       </div>`;
     });
