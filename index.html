@@ -486,29 +486,52 @@ const KO_ROUNDS = {
 // Fonte: goal.com/br + lance.com.br (jun/2026)
 // CazéTV (YouTube) transmite TODOS os 104 jogos
 // ─────────────────────────────────────────────
+// Jogos na Globo/SporTV (55 jogos confirmados — fonte: jornaldaparaiba.com.br, jun/2026)
+// Jogos não listados aqui = exclusivos CazéTV
 const GLOBO_GAMES = new Set([
+  // R1
   'A1R1',  // México × África do Sul
   'D1R1',  // EUA × Paraguai
   'C1R1',  // Brasil × Marrocos
+  'D2R1',  // Austrália × Turquia
   'F1R1',  // Holanda × Japão
+  'E2R1',  // Costa do Marfim × Equador
+  'F2R1',  // Suécia × Tunísia
+  'G1R1',  // Bélgica × Egito
   'H2R1',  // Arábia Saudita × Uruguai
   'I1R1',  // França × Senegal
+  'J2R1',  // Áustria × Jordânia
   'L1R1',  // Inglaterra × Croácia
+  'K2R1',  // Uzbequistão × Colômbia
+  // R2
   'B1R2',  // Suíça × Bósnia-Herzegovina
+  'A2R2',  // México × Coreia do Sul
   'C2R2',  // Brasil × Haiti
+  'D1R2',  // Turquia × Paraguai
   'E1R2',  // Alemanha × Costa do Marfim
+  'F2R2',  // Tunísia × Japão
+  'H2R2',  // Uruguai × Cabo Verde
+  'G2R2',  // Nova Zelândia × Egito
   'J1R2',  // Argentina × Áustria
+  'I2R2',  // Noruega × Senegal
+  'J2R2',  // Jordânia × Argélia
   'L1R2',  // Inglaterra × Gana
+  'K2R2',  // Colômbia × RD Congo
+  // R3
   'C1R3',  // Escócia × Brasil
 ]);
 
+// Jogos do Brasil (também no SBT)
+const SBT_GAMES = new Set(['C1R1','C2R2','C1R3']);
+
 function getTVChannels(matchId, type) {
   const channels = [];
-  if (type === 'ko' || GLOBO_GAMES.has(matchId)) {
-    channels.push({name:'Globo', cls:'tv-globo'});
-    channels.push({name:'SBT',   cls:'tv-sbt'});
-  }
-  channels.push({name:'SporTV', cls:'tv-sportv'});
+  const isGlobo = type === 'ko' || GLOBO_GAMES.has(matchId);
+  const isSbt   = SBT_GAMES.has(matchId);
+
+  if (isGlobo) channels.push({name:'Globo', cls:'tv-globo'});
+  if (isSbt)   channels.push({name:'SBT',   cls:'tv-sbt'});
+  if (isGlobo) channels.push({name:'SporTV', cls:'tv-sportv'});
   channels.push({name:'CazéTV', cls:'tv-caze', link:'https://www.youtube.com/@CazéTV'});
   return channels;
 }
@@ -613,6 +636,33 @@ function allThirds() {
 // ─────────────────────────────────────────────
 // RENDER — CARD DO GRUPO
 // ─────────────────────────────────────────────
+function getQualStatus(team, standings, gk) {
+  const gMatches = GROUP_MATCHES.filter(m => m.g === gk);
+  const played = gMatches.filter(m => results[m.id]).length;
+  if (played === 0) return null;
+
+  const idx = standings.findIndex(s => s.team === team);
+  const entry = standings[idx];
+  const remFor = t => gMatches.filter(m => !results[m.id] && (m.home===t||m.away===t)).length;
+
+  // Todos os jogos disputados → definitive
+  if (played === 6) return idx < 2 ? 'classified' : null;
+
+  // Matematicamente classificado: está no top 2 e o 3º não alcança mais
+  if (idx < 2 && standings.length >= 3) {
+    const third = standings[2];
+    if (third.pts + 3 * remFor(third.team) < entry.pts) return 'classified';
+  }
+
+  // Matematicamente eliminado: não alcança o 2º mesmo ganhando tudo
+  if (idx >= 2) {
+    const second = standings[1];
+    if (entry.pts + 3 * remFor(team) < second.pts) return 'eliminated';
+  }
+
+  return null;
+}
+
 function renderGroupCard(gk) {
   const g = GROUPS[gk];
   const st = calcStandings(gk);
@@ -636,14 +686,15 @@ function renderGroupCard(gk) {
 
   st.forEach((s,i) => {
     const pos = i+1;
+    const qualStatus = getQualStatus(s.team, st, gk);
     let badge='';
-    if (done) {
-      if(pos<=2) badge=`<span class="badge badge-green">✅ Classificado</span>`;
-      else if(pos===3) badge=`<span class="badge badge-yellow">🟡 Em disputa</span>`;
-      else badge=`<span class="badge badge-red">❌ Eliminado</span>`;
+    if (qualStatus === 'classified') {
+      badge=`<span class="badge badge-green">✅ Classificado</span>`;
+    } else if (qualStatus === 'eliminated') {
+      badge=`<span class="badge badge-red">❌ Eliminado</span>`;
     } else if (s.j>0) {
       if(pos<=2) badge=`<span class="badge badge-green">🟢 Liderando</span>`;
-      else if(pos===3) badge=`<span class="badge badge-yellow">🟡 Em disputa</span>`;
+      else if(pos===3) badge=`<span class="badge badge-yellow">🟡 3º lugar</span>`;
     }
     const sg = s.sg;
     const sgStr = sg>0?`+${sg}`:String(sg);
