@@ -179,6 +179,9 @@ main{padding:16px;max-width:1400px;margin:0 auto}
 .today-tname{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .today-score-box{font-size:1.25rem;font-weight:800;color:var(--gold);background:rgba(201,168,76,.12);padding:5px 14px;border-radius:8px;min-width:70px;text-align:center;flex-shrink:0;letter-spacing:2px}
 .today-score-ph{font-size:.85rem;color:var(--gray-mid);min-width:50px;text-align:center;flex-shrink:0}
+.live-score{color:#ff4444;background:rgba(255,68,68,.12);animation:pulse-live 1.5s infinite}
+.live-match{border-left:3px solid #ff4444!important}
+@keyframes pulse-live{0%,100%{opacity:1}50%{opacity:.6}}
 .today-tv{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
 .today-tv-label{font-size:.65rem;color:var(--gray-mid);font-weight:600;letter-spacing:.5px;margin-right:2px}
 .tv-badge{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;text-decoration:none;cursor:default}
@@ -432,52 +435,52 @@ const GROUP_MATCHES = [
 ];
 
 // ─────────────────────────────────────────────
-// DADOS — MATA-MATA
+// DADOS — MATA-MATA (datas/horários BRT confirmados — Sky Sports / worldcuppass.com)
 // ─────────────────────────────────────────────
 const KO_ROUNDS = {
   r32:{label:'Rodada de 32',matches:[
-    {id:'R32_1', date:'28/06 Dom',time:'17h',city:'Nova York/NJ',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_2', date:'28/06 Dom',time:'21h',city:'Seattle',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_3', date:'29/06 Seg',time:'17h',city:'Dallas',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_4', date:'29/06 Seg',time:'21h',city:'Filadélfia',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_5', date:'30/06 Ter',time:'17h',city:'Los Angeles',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_6', date:'30/06 Ter',time:'21h',city:'Houston',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_7', date:'01/07 Qua',time:'17h',city:'Miami',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_8', date:'01/07 Qua',time:'21h',city:'Atlanta',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_9', date:'02/07 Qui',time:'17h',city:'Kansas City',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_10',date:'02/07 Qui',time:'21h',city:'Boston',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_11',date:'03/07 Sex',time:'17h',city:'Toronto',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_12',date:'03/07 Sex',time:'17h',city:'Vancouver',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_13',date:'03/07 Sex',time:'21h',city:'Guadalajara',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_14',date:'03/07 Sex',time:'21h',city:'San Francisco',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_15',date:'03/07 Sex',time:'21h',city:'Houston',hl:'A DEFINIR',al:'A DEFINIR'},
-    {id:'R32_16',date:'03/07 Sex',time:'21h',city:'Dallas',hl:'A DEFINIR',al:'A DEFINIR'},
+    {id:'R32_1', date:'28/06 Dom',time:'16h',   city:'Los Angeles',      hl:'2º Grupo A',              al:'2º Grupo B'},
+    {id:'R32_2', date:'29/06 Seg',time:'14h',   city:'Houston',          hl:'1º Grupo E',              al:'Melhor 3º (A/B/C/D/F)'},
+    {id:'R32_3', date:'29/06 Seg',time:'17h30', city:'Boston',           hl:'1º Grupo F',              al:'2º Grupo C'},
+    {id:'R32_4', date:'29/06 Seg',time:'22h',   city:'Guadalajara',      hl:'1º Grupo C',              al:'2º Grupo F'},
+    {id:'R32_5', date:'30/06 Ter',time:'14h',   city:'Dallas',           hl:'1º Grupo I',              al:'Melhor 3º (C/D/F/G/H)'},
+    {id:'R32_6', date:'30/06 Ter',time:'18h',   city:'Nova York/NJ',     hl:'2º Grupo E',              al:'2º Grupo I'},
+    {id:'R32_7', date:'30/06 Ter',time:'22h',   city:'Cidade do México', hl:'1º Grupo A',              al:'Melhor 3º (C/E/F/H/I)'},
+    {id:'R32_8', date:'01/07 Qua',time:'13h',   city:'Atlanta',          hl:'1º Grupo L',              al:'Melhor 3º (E/H/I/J/K)'},
+    {id:'R32_9', date:'01/07 Qua',time:'17h',   city:'Seattle',          hl:'1º Grupo D',              al:'Melhor 3º (B/E/F/I/J)'},
+    {id:'R32_10',date:'01/07 Qua',time:'21h',   city:'San Francisco',    hl:'1º Grupo G',              al:'Melhor 3º (A/E/H/I/J)'},
+    {id:'R32_11',date:'02/07 Qui',time:'16h',   city:'Los Angeles',      hl:'1º Grupo H',              al:'2º Grupo J'},
+    {id:'R32_12',date:'02/07 Qui',time:'20h',   city:'Toronto',          hl:'2º Grupo K',              al:'2º Grupo L'},
+    {id:'R32_13',date:'03/07 Sex',time:'00h',   city:'Vancouver',        hl:'1º Grupo B',              al:'Melhor 3º (E/F/G/I/J)'},
+    {id:'R32_14',date:'03/07 Sex',time:'15h',   city:'Dallas',           hl:'1º Grupo J',              al:'2º Grupo H'},
+    {id:'R32_15',date:'03/07 Sex',time:'19h',   city:'Miami',            hl:'1º Grupo K',              al:'Melhor 3º (D/E/I/J/L)'},
+    {id:'R32_16',date:'03/07 Sex',time:'22h30', city:'Kansas City',      hl:'2º Grupo D',              al:'2º Grupo G'},
   ]},
   oitavas:{label:'Oitavas de Final',matches:[
-    {id:'OIT_1',date:'04/07 Sáb',time:'17h',city:'Dallas',hl:'Vencedor R32 1',al:'Vencedor R32 2'},
-    {id:'OIT_2',date:'04/07 Sáb',time:'21h',city:'Miami',hl:'Vencedor R32 3',al:'Vencedor R32 4'},
-    {id:'OIT_3',date:'05/07 Dom',time:'17h',city:'Nova York/NJ',hl:'Vencedor R32 5',al:'Vencedor R32 6'},
-    {id:'OIT_4',date:'05/07 Dom',time:'21h',city:'Houston',hl:'Vencedor R32 7',al:'Vencedor R32 8'},
-    {id:'OIT_5',date:'06/07 Seg',time:'17h',city:'Filadélfia',hl:'Vencedor R32 9',al:'Vencedor R32 10'},
-    {id:'OIT_6',date:'06/07 Seg',time:'21h',city:'Atlanta',hl:'Vencedor R32 11',al:'Vencedor R32 12'},
-    {id:'OIT_7',date:'07/07 Ter',time:'17h',city:'Los Angeles',hl:'Vencedor R32 13',al:'Vencedor R32 14'},
-    {id:'OIT_8',date:'07/07 Ter',time:'21h',city:'Seattle',hl:'Vencedor R32 15',al:'Vencedor R32 16'},
+    {id:'OIT_1',date:'04/07 Sáb',time:'14h',  city:'Houston',          hl:'Vencedor R32 1',  al:'Vencedor R32 3'},
+    {id:'OIT_2',date:'04/07 Sáb',time:'18h',  city:'Filadélfia',       hl:'Vencedor R32 2',  al:'Vencedor R32 5'},
+    {id:'OIT_3',date:'05/07 Dom',time:'17h',  city:'Nova York/NJ',     hl:'Vencedor R32 4',  al:'Vencedor R32 6'},
+    {id:'OIT_4',date:'05/07 Dom',time:'21h',  city:'Cidade do México', hl:'Vencedor R32 7',  al:'Vencedor R32 8'},
+    {id:'OIT_5',date:'06/07 Seg',time:'16h',  city:'Dallas',           hl:'Vencedor R32 11', al:'Vencedor R32 12'},
+    {id:'OIT_6',date:'06/07 Seg',time:'21h',  city:'Seattle',          hl:'Vencedor R32 9',  al:'Vencedor R32 10'},
+    {id:'OIT_7',date:'07/07 Ter',time:'13h',  city:'Atlanta',          hl:'Vencedor R32 14', al:'Vencedor R32 16'},
+    {id:'OIT_8',date:'07/07 Ter',time:'17h',  city:'Vancouver',        hl:'Vencedor R32 13', al:'Vencedor R32 15'},
   ]},
   quartas:{label:'Quartas de Final',matches:[
-    {id:'QRT_1',date:'09/07 Qui',time:'17h',city:'Kansas City',hl:'Vencedor Oit 1',al:'Vencedor Oit 2'},
-    {id:'QRT_2',date:'09/07 Qui',time:'21h',city:'Dallas',hl:'Vencedor Oit 3',al:'Vencedor Oit 4'},
-    {id:'QRT_3',date:'10/07 Sex',time:'17h',city:'Nova York/NJ',hl:'Vencedor Oit 5',al:'Vencedor Oit 6'},
-    {id:'QRT_4',date:'10/07 Sex',time:'21h',city:'Filadélfia',hl:'Vencedor Oit 7',al:'Vencedor Oit 8'},
+    {id:'QRT_1',date:'09/07 Qui',time:'17h',  city:'Boston',           hl:'Vencedor Oit 1',  al:'Vencedor Oit 2'},
+    {id:'QRT_2',date:'10/07 Sex',time:'16h',  city:'Los Angeles',      hl:'Vencedor Oit 5',  al:'Vencedor Oit 6'},
+    {id:'QRT_3',date:'11/07 Sáb',time:'18h',  city:'Miami',            hl:'Vencedor Oit 3',  al:'Vencedor Oit 4'},
+    {id:'QRT_4',date:'11/07 Sáb',time:'22h',  city:'Kansas City',      hl:'Vencedor Oit 7',  al:'Vencedor Oit 8'},
   ]},
   semis:{label:'Semifinais',matches:[
-    {id:'SEMI_1',date:'14/07 Seg',time:'16h',city:'Dallas',hl:'Vencedor Qrt 1',al:'Vencedor Qrt 2'},
-    {id:'SEMI_2',date:'15/07 Ter',time:'16h',city:'Atlanta',hl:'Vencedor Qrt 3',al:'Vencedor Qrt 4'},
+    {id:'SEMI_1',date:'14/07 Ter',time:'16h',city:'Dallas — AT&T Stadium',       hl:'Vencedor Qrt 1', al:'Vencedor Qrt 2'},
+    {id:'SEMI_2',date:'15/07 Qua',time:'16h',city:'Atlanta — Mercedes-Benz',     hl:'Vencedor Qrt 3', al:'Vencedor Qrt 4'},
   ]},
   terceiro:{label:'3º Lugar',matches:[
-    {id:'TERC_1',date:'18/07 Sex',time:'17h',city:'Miami — Hard Rock Stadium',hl:'Perdedor Semi 1',al:'Perdedor Semi 2'},
+    {id:'TERC_1',date:'18/07 Sáb',time:'18h',city:'Miami — Hard Rock Stadium',   hl:'Perdedor Semi 1',al:'Perdedor Semi 2'},
   ]},
   final:{label:'FINAL',matches:[
-    {id:'FINAL_1',date:'19/07 Sáb',time:'16h',city:'Nova York/NJ — MetLife Stadium',hl:'Vencedor Semi 1',al:'Vencedor Semi 2'},
+    {id:'FINAL_1',date:'19/07 Dom',time:'16h',city:'Nova York/NJ — MetLife Stadium',hl:'Vencedor Semi 1',al:'Vencedor Semi 2'},
   ]}
 };
 
@@ -557,6 +560,38 @@ const R32_BRACKET = [
   {id:'R32_15', h:'1K', a:'3*'},
   {id:'R32_16', h:'2D', a:'2G'},
 ];
+
+// Chaveamento das Oitavas: cada par de R32 que se enfrentam (NÃO consecutivos)
+const OIT_BRACKET = [
+  {id:'OIT_1', h:'R32_1',  a:'R32_3'},
+  {id:'OIT_2', h:'R32_2',  a:'R32_5'},
+  {id:'OIT_3', h:'R32_4',  a:'R32_6'},
+  {id:'OIT_4', h:'R32_7',  a:'R32_8'},
+  {id:'OIT_5', h:'R32_11', a:'R32_12'},
+  {id:'OIT_6', h:'R32_9',  a:'R32_10'},
+  {id:'OIT_7', h:'R32_14', a:'R32_16'},
+  {id:'OIT_8', h:'R32_13', a:'R32_15'},
+];
+
+// Chaveamento das Quartas
+const QRT_BRACKET = [
+  {id:'QRT_1', h:'OIT_1', a:'OIT_2'},
+  {id:'QRT_2', h:'OIT_5', a:'OIT_6'},
+  {id:'QRT_3', h:'OIT_3', a:'OIT_4'},
+  {id:'QRT_4', h:'OIT_7', a:'OIT_8'},
+];
+
+// Grupos elegíveis para cada slot "Melhor 3º" na Rodada de 32
+const R32_THIRD_SLOTS = {
+  'R32_2':  ['A','B','C','D','F'],
+  'R32_5':  ['C','D','F','G','H'],
+  'R32_7':  ['C','E','F','H','I'],
+  'R32_8':  ['E','H','I','J','K'],
+  'R32_9':  ['B','E','F','I','J'],
+  'R32_10': ['A','E','H','I','J'],
+  'R32_13': ['E','F','G','I','J'],
+  'R32_15': ['D','E','I','J','L'],
+};
 
 // ─────────────────────────────────────────────
 // ESTADO
@@ -852,31 +887,53 @@ function koSemiLoser(semiId) {
   return kr.winner === kr.homeTeam ? kr.awayTeam : kr.homeTeam;
 }
 
+// Resolve melhores 3ºs para slots R32 (greedy, só após todos os grupos concluídos)
+let _cachedBestThirds = null;
+function getBestThirdsAssignment() {
+  const allDone = Object.keys(GROUPS).every(gk => groupDone(gk));
+  if (!allDone) return {};
+  const thirds = allThirds().slice(0, 8);
+  const usedGks = new Set();
+  const assigned = {};
+  // Processar slots na ordem definida
+  Object.entries(R32_THIRD_SLOTS).forEach(([r32Id, eligible]) => {
+    const best = thirds.find(t => eligible.includes(t.gk) && !usedGks.has(t.gk));
+    if (best) { assigned[r32Id] = best.team; usedGks.add(best.gk); }
+  });
+  return assigned;
+}
+
 // Auto-resolve o nome do time para qualquer slot do mata-mata
 function resolveKoTeam(id, side) {
   // R32 — baseado nas posições dos grupos
   const r32slot = R32_BRACKET.find(s => s.id === id);
   if (r32slot) {
-    return resolveGroupPos(side === 'home' ? r32slot.h : r32slot.a);
+    const pos = side === 'home' ? r32slot.h : r32slot.a;
+    if (pos === '3*') {
+      const assignment = getBestThirdsAssignment();
+      return assignment[id] || null;
+    }
+    return resolveGroupPos(pos);
   }
-  // Oitavas — vencedor dos pares R32 (1-2, 3-4, 5-6, 7-8, 9-10, 11-12, 13-14, 15-16)
-  const oi = KO_ROUNDS.oitavas.matches.findIndex(m => m.id === id);
-  if (oi !== -1) {
-    const src = `R32_${oi*2 + (side==='home'?1:2)}`;
+  // Oitavas — usar OIT_BRACKET (pares corretos, não consecutivos)
+  const oitSlot = OIT_BRACKET.find(s => s.id === id);
+  if (oitSlot) {
+    const src = side === 'home' ? oitSlot.h : oitSlot.a;
     const kr = koResults[src];
     return kr && kr.winner ? kr.winner : null;
   }
-  // Quartas — vencedor dos pares de Oitavas
-  const qi = KO_ROUNDS.quartas.matches.findIndex(m => m.id === id);
-  if (qi !== -1) {
-    const src = `OIT_${qi*2 + (side==='home'?1:2)}`;
+  // Quartas — usar QRT_BRACKET
+  const qrtSlot = QRT_BRACKET.find(s => s.id === id);
+  if (qrtSlot) {
+    const src = side === 'home' ? qrtSlot.h : qrtSlot.a;
     const kr = koResults[src];
     return kr && kr.winner ? kr.winner : null;
   }
-  // Semifinais — vencedor dos pares de Quartas
+  // Semifinais — QRT_1+2 → SEMI_1, QRT_3+4 → SEMI_2
   const si = KO_ROUNDS.semis.matches.findIndex(m => m.id === id);
   if (si !== -1) {
-    const src = `QRT_${si*2 + (side==='home'?1:2)}`;
+    const pairs = [['QRT_1','QRT_2'],['QRT_3','QRT_4']];
+    const src = side === 'home' ? pairs[si][0] : pairs[si][1];
     const kr = koResults[src];
     return kr && kr.winner ? kr.winner : null;
   }
@@ -1062,16 +1119,46 @@ function refreshKo() {
 // ─────────────────────────────────────────────
 // BANNER BRASIL
 // ─────────────────────────────────────────────
-function updateBrasilBanner() {
-  const brMs = GROUP_MATCHES.filter(m=>m.home==='Brasil'||m.away==='Brasil');
-  const next = brMs.find(m=>!results[m.id]);
-  const el = document.getElementById('brasilNextMatch');
-  if (!next) {
-    el.innerHTML = `<strong>Fase de grupos concluída!</strong> Verifique o chaveamento.`;
-  } else {
-    const opp = next.home==='Brasil'?next.away:next.home;
-    el.innerHTML = `<strong>${next.date} às ${next.time}</strong> — ${flag('Brasil')} Brasil vs ${flag(opp)} ${opp} &nbsp;|&nbsp; 📍 ${next.city}`;
+function findBrasilKoMatch() {
+  const koOrder = [
+    {key:'r32',     label:'Rodada de 32'},
+    {key:'oitavas', label:'Oitavas de Final'},
+    {key:'quartas', label:'Quartas de Final'},
+    {key:'semis',   label:'Semifinal'},
+    {key:'final',   label:'FINAL'},
+    {key:'terceiro',label:'3º Lugar'},
+  ];
+  for (const rnd of koOrder) {
+    for (const m of KO_ROUNDS[rnd.key].matches) {
+      const hn = koTeamName(m.id, 'home', m.hl);
+      const an = koTeamName(m.id, 'away', m.al);
+      const hasBr = hn === 'Brasil' || an === 'Brasil';
+      if (!hasBr) continue;
+      const kr = koResults[m.id];
+      if (kr && kr.home !== undefined) continue; // já jogou
+      const opp = hn === 'Brasil' ? an : hn;
+      return { date: m.date, time: m.time, city: m.city, opp, round: rnd.label };
+    }
   }
+  return null;
+}
+
+function updateBrasilBanner() {
+  const el = document.getElementById('brasilNextMatch');
+  const brMs = GROUP_MATCHES.filter(m=>m.home==='Brasil'||m.away==='Brasil');
+  const nextGroup = brMs.find(m=>!results[m.id]);
+  if (nextGroup) {
+    const opp = nextGroup.home==='Brasil' ? nextGroup.away : nextGroup.home;
+    el.innerHTML = `<strong>${nextGroup.date} às ${nextGroup.time}</strong> — ${flag('Brasil')} Brasil vs ${flag(opp)} ${opp} &nbsp;|&nbsp; 📍 ${nextGroup.city}`;
+    return;
+  }
+  const koMatch = findBrasilKoMatch();
+  if (koMatch) {
+    const oppFlag = isPlaceholder(koMatch.opp) ? '' : flag(koMatch.opp) + ' ';
+    el.innerHTML = `<span style="background:var(--magenta);color:#fff;font-size:.7rem;padding:2px 6px;border-radius:4px;margin-right:6px">${koMatch.round}</span><strong>${koMatch.date} às ${koMatch.time}</strong> — ${flag('Brasil')} Brasil vs ${oppFlag}${koMatch.opp} &nbsp;|&nbsp; 📍 ${koMatch.city}`;
+    return;
+  }
+  el.innerHTML = `<strong>🏆 Fase de grupos concluída!</strong> Verifique o chaveamento para o próximo jogo do Brasil.`;
 }
 
 // ─────────────────────────────────────────────
@@ -1109,6 +1196,85 @@ function parseDM(dateStr) {
   const dm = dateStr.split(' ')[0];
   const [d, m] = dm.split('/').map(Number);
   return new Date(2026, m - 1, d);
+}
+
+// ─────────────────────────────────────────────
+// PLACAR AO VIVO — ESPN API
+// ─────────────────────────────────────────────
+const ESPN_NAME_MAP = {
+  'Brazil':'Brasil','Morocco':'Marrocos','Haiti':'Haiti','Scotland':'Escócia',
+  'Mexico':'México','South Africa':'África do Sul','South Korea':'Coreia do Sul','Czech Republic':'Rep. Tcheca',
+  'Canada':'Canadá','Qatar':'Catar','Switzerland':'Suíça','Bosnia and Herzegovina':'Bósnia-Herzegovina',
+  'United States':'Estados Unidos','Paraguay':'Paraguai','Australia':'Austrália','Turkey':'Turquia',
+  'Germany':'Alemanha','Curaçao':'Curaçao','Ivory Coast':'Costa do Marfim','Ecuador':'Equador',
+  'Netherlands':'Holanda','Japan':'Japão','Tunisia':'Tunísia','Sweden':'Suécia',
+  'Belgium':'Bélgica','Egypt':'Egito','Iran':'Irã','New Zealand':'Nova Zelândia',
+  'Spain':'Espanha','Cape Verde':'Cabo Verde','Saudi Arabia':'Arábia Saudita','Uruguay':'Uruguai',
+  'France':'França','Senegal':'Senegal','Norway':'Noruega','Iraq':'Iraque',
+  'Argentina':'Argentina','Algeria':'Argélia','Austria':'Áustria','Jordan':'Jordânia',
+  'Portugal':'Portugal','Uzbekistan':'Uzbequistão','Colombia':'Colômbia','DR Congo':'RD Congo',
+  'England':'Inglaterra','Croatia':'Croácia','Ghana':'Gana','Panama':'Panamá',
+};
+
+let _liveData = {}; // { espnId: {homeScore, awayScore, status, homeName, awayName} }
+let _lastFetch = null;
+let _liveInterval = null;
+
+async function fetchLiveScores() {
+  try {
+    const url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
+    const r = await fetch(url, {cache:'no-cache'});
+    if (!r.ok) return;
+    const data = await r.json();
+    const events = data.events || [];
+    const newLive = {};
+    events.forEach(ev => {
+      const comp = ev.competitions && ev.competitions[0];
+      if (!comp) return;
+      const st = comp.status && comp.status.type;
+      const competitors = comp.competitors || [];
+      if (competitors.length < 2) return;
+      const home = competitors.find(c => c.homeAway === 'home') || competitors[0];
+      const away = competitors.find(c => c.homeAway === 'away') || competitors[1];
+      const homeEn = home.team && home.team.displayName;
+      const awayEn = away.team && away.team.displayName;
+      const homePt = ESPN_NAME_MAP[homeEn] || homeEn;
+      const awayPt = ESPN_NAME_MAP[awayEn] || awayEn;
+      newLive[`${homePt}|${awayPt}`] = {
+        homeScore: home.score,
+        awayScore: away.score,
+        state: st && st.state,      // 'pre','in','post'
+        completed: st && st.completed,
+        homeTeam: homePt,
+        awayTeam: awayPt,
+        clock: comp.status && comp.status.displayClock,
+      };
+    });
+    _liveData = newLive;
+    _lastFetch = new Date();
+    renderTodayTab();
+  } catch(e) { /* sem internet ou CORS bloqueado — ignora */ }
+}
+
+function getLiveInfo(homeTeam, awayTeam) {
+  return _liveData[`${homeTeam}|${awayTeam}`] || null;
+}
+
+function startLivePolling() {
+  if (_liveInterval) return;
+  fetchLiveScores();
+  _liveInterval = setInterval(fetchLiveScores, 60000);
+}
+function stopLivePolling() {
+  if (_liveInterval) { clearInterval(_liveInterval); _liveInterval = null; }
+}
+
+function isMatchLiveNow(matchTimeStr, matchDate) {
+  const now = new Date();
+  const [hh, mm] = matchTimeStr.replace('h','').split(':').map(n => parseInt(n)||0);
+  const start = new Date(matchDate.getFullYear(), matchDate.getMonth(), matchDate.getDate(), hh, mm||0);
+  const diff = (now - start) / 60000; // minutos
+  return diff >= 0 && diff <= 115;
 }
 
 function renderTodayTab() {
@@ -1163,7 +1329,10 @@ function renderTodayTab() {
     return;
   }
 
-  let html = '';
+  const lastUpdStr = _lastFetch
+    ? `<span style="color:var(--gray-mid);font-size:.7rem">🔄 Placar ao vivo · atualizado às ${_lastFetch.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>`
+    : `<span style="color:var(--gray-mid);font-size:.7rem">🔄 Buscando placares ao vivo…</span>`;
+  let html = `<div style="text-align:right;margin-bottom:8px">${lastUpdStr}</div>`;
 
   visible.forEach(dayData => {
     const diff = Math.round((dayData.d - todayNorm) / MS_DAY);
@@ -1183,7 +1352,6 @@ function renderTodayTab() {
       </div>
       <div class="today-matches-list">`;
 
-    // Ordenar por horário
     dayData.matches.sort((a,b) => (parseInt(a.time)||0) - (parseInt(b.time)||0));
 
     dayData.matches.forEach(m => {
@@ -1191,9 +1359,24 @@ function renderTodayTab() {
       const hasR = r && r.home !== undefined && r.away !== undefined;
       const isBr = m.home==='Brasil' || m.away==='Brasil';
 
-      const scoreBlock = hasR
-        ? `<span class="today-score-box">${r.home} × ${r.away}</span>`
-        : `<span class="today-score-ph">${isToday||isPast ? '— × —' : m.time}</span>`;
+      // Verificar dados ao vivo da ESPN
+      const live = getLiveInfo(m.home, m.away);
+      const isLiveNow = isToday && isMatchLiveNow(m.time, dayData.d);
+      const showLive = live && (live.state === 'in');
+      const showCompleted = live && live.completed && !hasR;
+
+      let scoreBlock;
+      if (hasR) {
+        scoreBlock = `<span class="today-score-box">${r.home} × ${r.away}</span>`;
+      } else if (showLive) {
+        scoreBlock = `<span class="today-score-box live-score">🔴 ${live.homeScore} × ${live.awayScore} <small>${live.clock||''}</small></span>`;
+      } else if (showCompleted) {
+        scoreBlock = `<span class="today-score-box">${live.homeScore} × ${live.awayScore}</span>`;
+      } else if (isLiveNow && !hasR) {
+        scoreBlock = `<span class="today-score-box live-score">🔴 AO VIVO</span>`;
+      } else {
+        scoreBlock = `<span class="today-score-ph">${isToday||isPast ? '— × —' : m.time}</span>`;
+      }
 
       const tvChannels = getTVChannels(m.id, m.type);
       const tvHtml = tvChannels.map(ch =>
@@ -1202,7 +1385,7 @@ function renderTodayTab() {
           : `<span class="tv-badge ${ch.cls}">📺 ${ch.name}</span>`
       ).join('');
 
-      html += `<div class="today-match${isBr?' br-match':''}">
+      html += `<div class="today-match${isBr?' br-match':''}${showLive?' live-match':''}">
         <div class="today-match-meta">
           <span class="today-time">🕐 ${m.time}</span>
           <span class="today-comp">${m.label}</span>
@@ -1236,8 +1419,9 @@ function showTab(name, btn) {
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
-  if(name==='hoje')       renderTodayTab();
-  else if(name==='melhores3') renderThirds();
+  if (name==='hoje') { startLivePolling(); renderTodayTab(); return; }
+  stopLivePolling();
+  if(name==='melhores3') renderThirds();
   else if(name==='r32')    renderKoRound('r32','r32Container');
   else if(name==='oitavas') renderKoRound('oitavas','oitavasContainer');
   else if(name==='quartas') renderKoRound('quartas','quartasContainer');
