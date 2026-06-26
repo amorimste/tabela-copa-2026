@@ -435,26 +435,44 @@ const GROUP_MATCHES = [
 ];
 
 // ─────────────────────────────────────────────
-// DADOS — MATA-MATA (datas/horários BRT confirmados — Sky Sports / worldcuppass.com)
+// DADOS — MATA-MATA
+// Horários BRT confirmados: Wikipedia EN + ESPN Brasil + Trivela
+// ET (UTC-4) +1=BRT | CT EUA (UTC-5) +2=BRT | PT (UTC-7) +4=BRT | Mexico (UTC-6) +3=BRT
 // ─────────────────────────────────────────────
 const KO_ROUNDS = {
   r32:{label:'Rodada de 32',matches:[
+    // 28/jun — M73 — 12h PT (LA) = 16h BRT
     {id:'R32_1', date:'28/06 Dom',time:'16h',   city:'Los Angeles',      hl:'2º Grupo A',              al:'2º Grupo B'},
-    {id:'R32_2', date:'29/06 Seg',time:'14h',   city:'Houston',          hl:'1º Grupo E',              al:'Melhor 3º (A/B/C/D/F)'},
-    {id:'R32_3', date:'29/06 Seg',time:'17h30', city:'Boston',           hl:'1º Grupo F',              al:'2º Grupo C'},
-    {id:'R32_4', date:'29/06 Seg',time:'22h',   city:'Guadalajara',      hl:'1º Grupo C',              al:'2º Grupo F'},
-    {id:'R32_5', date:'30/06 Ter',time:'14h',   city:'Dallas',           hl:'1º Grupo I',              al:'Melhor 3º (C/D/F/G/H)'},
-    {id:'R32_6', date:'30/06 Ter',time:'18h',   city:'Nova York/NJ',     hl:'2º Grupo E',              al:'2º Grupo I'},
-    {id:'R32_7', date:'30/06 Ter',time:'22h',   city:'Cidade do México', hl:'1º Grupo A',              al:'Melhor 3º (C/E/F/H/I)'},
-    {id:'R32_8', date:'01/07 Qua',time:'13h',   city:'Atlanta',          hl:'1º Grupo L',              al:'Melhor 3º (E/H/I/J/K)'},
-    {id:'R32_9', date:'01/07 Qua',time:'17h',   city:'Seattle',          hl:'1º Grupo D',              al:'Melhor 3º (B/E/F/I/J)'},
-    {id:'R32_10',date:'01/07 Qua',time:'21h',   city:'San Francisco',    hl:'1º Grupo G',              al:'Melhor 3º (A/E/H/I/J)'},
-    {id:'R32_11',date:'02/07 Qui',time:'16h',   city:'Los Angeles',      hl:'1º Grupo H',              al:'2º Grupo J'},
-    {id:'R32_12',date:'02/07 Qui',time:'20h',   city:'Toronto',          hl:'2º Grupo K',              al:'2º Grupo L'},
+    // 29/jun — M74 — 4h30 ET (Boston) = 17h30 BRT
+    {id:'R32_2', date:'29/06 Seg',time:'17h30', city:'Boston',           hl:'1º Grupo E',              al:'Melhor 3º (C/D/F)'},
+    // 29/jun — M75 — 7h CT Mexico (Monterrey/Guadalupe) = 22h BRT
+    {id:'R32_3', date:'29/06 Seg',time:'22h',   city:'Monterrey',        hl:'1º Grupo F',              al:'2º Grupo C'},
+    // 29/jun — M76 — 12h CT (Houston) = 14h BRT ← BRASIL
+    {id:'R32_4', date:'29/06 Seg',time:'14h',   city:'Houston',          hl:'1º Grupo C',              al:'2º Grupo F'},
+    // 30/jun — M77 — 5h ET (NJ) = 18h BRT
+    {id:'R32_5', date:'30/06 Ter',time:'18h',   city:'Nova York/NJ',     hl:'1º Grupo I',              al:'Melhor 3º (D/F/G)'},
+    // 30/jun — M78 — 12h CT (Dallas) = 14h BRT
+    {id:'R32_6', date:'30/06 Ter',time:'14h',   city:'Dallas',           hl:'2º Grupo E',              al:'2º Grupo I'},
+    // 30/jun — M79 — 7h CT Mexico (Azteca) = 22h BRT
+    {id:'R32_7', date:'30/06 Ter',time:'22h',   city:'Cidade do México', hl:'1º Grupo A',              al:'Melhor 3º (C/E/H)'},
+    // 01/jul — M80 — 12h ET (Atlanta) = 13h BRT
+    {id:'R32_8', date:'01/07 Qua',time:'13h',   city:'Atlanta',          hl:'1º Grupo L',              al:'Melhor 3º (E/I/J/K)'},
+    // 01/jul — M81 — 5h PT (Santa Clara/SF) = 21h BRT
+    {id:'R32_9', date:'01/07 Qua',time:'21h',   city:'San Francisco',    hl:'1º Grupo D',              al:'Melhor 3º (B/E/F/I/J)'},
+    // 01/jul — M82 — 1h PT (Seattle) = 17h BRT
+    {id:'R32_10',date:'01/07 Qua',time:'17h',   city:'Seattle',          hl:'1º Grupo G',              al:'Melhor 3º (A/H/I/J)'},
+    // 02/jul — M83 — 7h ET (Toronto) = 20h BRT  [R32_BRACKET: 2K vs 2L]
+    {id:'R32_11',date:'02/07 Qui',time:'20h',   city:'Toronto',          hl:'2º Grupo K',              al:'2º Grupo L'},
+    // 02/jul — M84 — 12h PT (LA) = 16h BRT  [R32_BRACKET: 1H vs 2J]
+    {id:'R32_12',date:'02/07 Qui',time:'16h',   city:'Los Angeles',      hl:'1º Grupo H',              al:'2º Grupo J'},
+    // 03/jul — M85 — 8h PT (Vancouver) = 00h BRT
     {id:'R32_13',date:'03/07 Sex',time:'00h',   city:'Vancouver',        hl:'1º Grupo B',              al:'Melhor 3º (E/F/G/I/J)'},
-    {id:'R32_14',date:'03/07 Sex',time:'15h',   city:'Dallas',           hl:'1º Grupo J',              al:'2º Grupo H'},
-    {id:'R32_15',date:'03/07 Sex',time:'19h',   city:'Miami',            hl:'1º Grupo K',              al:'Melhor 3º (D/E/I/J/L)'},
-    {id:'R32_16',date:'03/07 Sex',time:'22h30', city:'Kansas City',      hl:'2º Grupo D',              al:'2º Grupo G'},
+    // 03/jul — M86 — 6h ET (Miami) = 19h BRT  [R32_BRACKET: 1J vs 2H]
+    {id:'R32_14',date:'03/07 Sex',time:'19h',   city:'Miami',            hl:'1º Grupo J',              al:'2º Grupo H'},
+    // 03/jul — M87 — 8h30 CT (Kansas City) = 22h30 BRT  [R32_BRACKET: 1K vs 3*]
+    {id:'R32_15',date:'03/07 Sex',time:'22h30', city:'Kansas City',      hl:'1º Grupo K',              al:'Melhor 3º (D/E/I/J/L)'},
+    // 03/jul — M88 — 1h CT (Dallas) = 15h BRT  [R32_BRACKET: 2D vs 2G]
+    {id:'R32_16',date:'03/07 Sex',time:'15h',   city:'Dallas',           hl:'2º Grupo D',              al:'2º Grupo G'},
   ]},
   oitavas:{label:'Oitavas de Final',matches:[
     {id:'OIT_1',date:'04/07 Sáb',time:'14h',  city:'Houston',          hl:'Vencedor R32 1',  al:'Vencedor R32 3'},
@@ -581,14 +599,14 @@ const QRT_BRACKET = [
   {id:'QRT_4', h:'OIT_7', a:'OIT_8'},
 ];
 
-// Grupos elegíveis para cada slot "Melhor 3º" na Rodada de 32
+// Grupos elegíveis para cada slot "Melhor 3º" — fonte: Wikipedia EN (dados confirmados torneio 2026)
 const R32_THIRD_SLOTS = {
-  'R32_2':  ['A','B','C','D','F'],
-  'R32_5':  ['C','D','F','G','H'],
-  'R32_7':  ['C','E','F','H','I'],
-  'R32_8':  ['E','H','I','J','K'],
+  'R32_2':  ['C','D','F'],
+  'R32_5':  ['D','F','G'],
+  'R32_7':  ['C','E','H'],
+  'R32_8':  ['E','I','J','K'],
   'R32_9':  ['B','E','F','I','J'],
-  'R32_10': ['A','E','H','I','J'],
+  'R32_10': ['A','H','I','J'],
   'R32_13': ['E','F','G','I','J'],
   'R32_15': ['D','E','I','J','L'],
 };
@@ -841,26 +859,68 @@ function editMatch(id) {
 // ─────────────────────────────────────────────
 function renderThirds() {
   const list = allThirds();
+  // Calcular atribuição de slots R32 para os 8 melhores 3ºs
+  const assignment = getBestThirdsAssignment(); // {r32Id → team}
+  // Inverter: team → r32Id
+  const teamToSlot = {};
+  Object.entries(assignment).forEach(([r32Id, team]) => { teamToSlot[team] = r32Id; });
+
   let h = `<div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--gold);letter-spacing:2px;margin-bottom:14px">
     🏆 CLASSIFICAÇÃO DOS TERCEIROS COLOCADOS</div>
   <div class="thirds-grid">`;
-  list.forEach((t,i) => {
-    const ok = i<8;
-    const sg = t.sg||0; const sgStr=sg>0?'+'+sg:String(sg);
-    h += `<div class="third-card ${ok?'qualified':''}">
-      <div class="third-rank">${i+1}º</div>
+
+  list.forEach((t, i) => {
+    const ok = i < 8;
+    const sg = t.sg || 0;
+    const sgStr = sg > 0 ? '+' + sg : String(sg);
+
+    // Próxima fase: mostrar adversário no R32
+    let nextPhaseHtml = '';
+    if (ok) {
+      const slotId = teamToSlot[t.team];
+      if (slotId) {
+        // Encontrar o match do slot
+        const m = KO_ROUNDS.r32.matches.find(m => m.id === slotId);
+        if (m) {
+          // Descobrir o adversário (o lado h do slot é sempre o 1º de um grupo)
+          const oppName = resolveGroupPos(R32_BRACKET.find(s => s.id === slotId)?.h || '');
+          const oppLabel = oppName || m.hl;
+          nextPhaseHtml = `<div style="margin-top:6px;font-size:.72rem;color:#ccc;border-top:1px solid rgba(255,255,255,.1);padding-top:5px">
+            <span style="color:var(--gold)">▶ R32:</span> ${flag(oppLabel)} ${oppLabel}
+            <span style="color:var(--gray-mid)"> | ${m.date} ${m.time} · ${m.city}</span>
+          </div>`;
+        }
+      } else {
+        // Grupos ainda não concluídos — mostrar eligible
+        const eligibleSlot = Object.entries(R32_THIRD_SLOTS).find(([, groups]) => groups.includes(t.gk));
+        if (eligibleSlot) {
+          const m = KO_ROUNDS.r32.matches.find(m => m.id === eligibleSlot[0]);
+          if (m) {
+            nextPhaseHtml = `<div style="margin-top:6px;font-size:.72rem;color:#ccc;border-top:1px solid rgba(255,255,255,.1);padding-top:5px">
+              <span style="color:var(--gold)">▶ Possível R32:</span> vs ${m.hl}
+              <span style="color:var(--gray-mid)"> | ${m.date} ${m.time} · ${m.city}</span>
+            </div>`;
+          }
+        }
+      }
+    }
+
+    h += `<div class="third-card ${ok ? 'qualified' : ''}">
+      <div class="third-rank">${i + 1}º</div>
       <div class="third-info">
         <div class="ti-name">${flag(t.team)} ${t.team}</div>
         <div class="ti-group">Grupo ${t.gk}</div>
-        <div class="ti-stats">Pts: <strong>${t.pts}</strong> &nbsp;SG: <strong>${sgStr}</strong> &nbsp;GP: <strong>${t.gp||0}</strong></div>
+        <div class="ti-stats">Pts: <strong>${t.pts}</strong> &nbsp;SG: <strong>${sgStr}</strong> &nbsp;GP: <strong>${t.gp || 0}</strong></div>
         ${ok
           ? '<span class="badge badge-green" style="margin-top:5px;display:inline-block">✅ Classificado</span>'
           : '<span class="badge badge-red" style="margin-top:5px;display:inline-block">❌ Eliminado</span>'}
+        ${nextPhaseHtml}
       </div>
     </div>`;
   });
+
   h += `</div><p style="color:var(--gray-mid);font-size:.75rem;margin-top:12px;font-style:italic">
-    * Empate em todos critérios: sorteio.</p>`;
+    * Adversário definitivo confirmado após conclusão de todos os grupos.</p>`;
   document.getElementById('thirdsContainer').innerHTML = h;
 }
 
