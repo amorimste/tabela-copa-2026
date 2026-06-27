@@ -503,55 +503,91 @@ const KO_ROUNDS = {
 };
 
 // ─────────────────────────────────────────────
-// TRANSMISSÃO — jogos confirmados na Globo/SBT
-// Fonte: goal.com/br + lance.com.br (jun/2026)
-// CazéTV (YouTube) transmite TODOS os 104 jogos
+// TRANSMISSÃO
+// Fonte: jornaldaparaiba.com.br + sports.sbt.com.br + lance.com.br (jun/2026)
+// CazéTV transmite TODOS os 104 jogos (YouTube gratuito)
+// Globo/SporTV: ~55 jogos | SBT/NSports: 32 jogos
+// No mata-mata, Globo tem prioridade de escolha (picks first)
 // ─────────────────────────────────────────────
-// Jogos na Globo/SporTV (55 jogos confirmados — fonte: jornaldaparaiba.com.br, jun/2026)
-// Jogos não listados aqui = exclusivos CazéTV
+
+// Jogos confirmados na Globo + SporTV
 const GLOBO_GAMES = new Set([
-  // R1
-  'A1R1',  // México × África do Sul
-  'D1R1',  // EUA × Paraguai
-  'C1R1',  // Brasil × Marrocos
-  'D2R1',  // Austrália × Turquia
-  'F1R1',  // Holanda × Japão
-  'E2R1',  // Costa do Marfim × Equador
-  'F2R1',  // Suécia × Tunísia
-  'G1R1',  // Bélgica × Egito
-  'H2R1',  // Arábia Saudita × Uruguai
-  'I1R1',  // França × Senegal
-  'J2R1',  // Áustria × Jordânia
-  'L1R1',  // Inglaterra × Croácia
-  'K2R1',  // Uzbequistão × Colômbia
-  // R2
-  'B1R2',  // Suíça × Bósnia-Herzegovina
-  'A2R2',  // México × Coreia do Sul
-  'C2R2',  // Brasil × Haiti
-  'D1R2',  // Turquia × Paraguai
-  'E1R2',  // Alemanha × Costa do Marfim
-  'F2R2',  // Tunísia × Japão
-  'H2R2',  // Uruguai × Cabo Verde
-  'G2R2',  // Nova Zelândia × Egito
-  'J1R2',  // Argentina × Áustria
-  'I2R2',  // Noruega × Senegal
-  'J2R2',  // Jordânia × Argélia
-  'L1R2',  // Inglaterra × Gana
-  'K2R2',  // Colômbia × RD Congo
-  // R3
-  'C1R3',  // Escócia × Brasil
+  // RODADA 1 — 13 jogos (Globo escolhe 1ª na R1)
+  'A1R1',  // México × África do Sul         — 11/06 16h
+  'D1R1',  // EUA × Paraguai                 — 12/06 22h
+  'C1R1',  // Brasil × Marrocos              — 13/06 19h ★
+  'D2R1',  // Austrália × Turquia            — 14/06 01h
+  'F1R1',  // Holanda × Japão                — 14/06 17h
+  'E2R1',  // Costa do Marfim × Equador      — 14/06 20h
+  'F2R1',  // Suécia × Tunísia               — 14/06 23h
+  'G1R1',  // Bélgica × Egito                — 15/06 16h
+  'H2R1',  // Arábia Saudita × Uruguai       — 15/06 19h
+  'I1R1',  // França × Senegal               — 16/06 16h
+  'J2R1',  // Áustria × Jordânia             — 17/06 01h
+  'L1R1',  // Inglaterra × Croácia           — 17/06 17h
+  'K2R1',  // Uzbequistão × Colômbia         — 17/06 23h
+
+  // RODADA 2 — 13 jogos (Globo escolhe 2ª na R2)
+  'B1R2',  // Suíça × Bósnia-Herzegovina     — 18/06 16h
+  'A2R2',  // México × Coreia do Sul         — 18/06 22h
+  'C2R2',  // Brasil × Haiti                 — 19/06 21h30 ★
+  'D1R2',  // Turquia × Paraguai             — 20/06 00h
+  'E1R2',  // Alemanha × Costa do Marfim     — 20/06 17h
+  'F2R2',  // Tunísia × Japão               — 21/06 01h
+  'H2R2',  // Uruguai × Cabo Verde           — 21/06 19h
+  'G2R2',  // Nova Zelândia × Egito          — 21/06 22h
+  'J1R2',  // Argentina × Áustria            — 22/06 14h
+  'I2R2',  // Noruega × Senegal              — 22/06 21h
+  'J2R2',  // Jordânia × Argélia             — 23/06 00h
+  'L1R2',  // Inglaterra × Gana              — 23/06 17h
+  'K2R2',  // Colômbia × RD Congo            — 23/06 23h
+
+  // RODADA 3 — 10 jogos confirmados (fonte: jornaldaparaiba.com.br)
+  'C1R3',  // Escócia × Brasil               — 24/06 19h ★
+  'A1R3',  // Rep. Tcheca × México           — 24/06 22h
+  'E1R3',  // Equador × Alemanha             — 25/06 17h
+  'F1R3',  // Japão × Suécia                 — 25/06 20h
+  'D1R3',  // Turquia × EUA                  — 25/06 23h
+  'I1R3',  // Noruega × França               — 26/06 16h
+  'H2R3',  // Uruguai × Espanha              — 26/06 21h
+  'G1R3',  // Egito × Irã                    — 27/06 00h
+  'L1R3',  // Panamá × Inglaterra            — 27/06 18h
+  'J1R3',  // Argélia × Áustria              — 27/06 23h
 ]);
 
-// Jogos do Brasil (também no SBT)
-const SBT_GAMES = new Set(['C1R1','C2R2','C1R3']);
+// SBT/NSports: 14 jogos confirmados em junho (fonte: sports.sbt.com.br)
+// Todos os jogos do SBT também passam na Globo (sublicenciamento via CazéTV)
+const SBT_GAMES = new Set([
+  // Rodada 1 — 7 jogos
+  'A1R1',  // México × África do Sul
+  'D1R1',  // EUA × Paraguai
+  'C1R1',  // Brasil × Marrocos ★
+  'F1R1',  // Holanda × Japão
+  'H2R1',  // Arábia Saudita × Uruguai
+  'I1R1',  // França × Senegal
+  'L1R1',  // Inglaterra × Croácia
+  // Rodada 2 — 6 jogos
+  'B1R2',  // Suíça × Bósnia-Herzegovina
+  'C2R2',  // Brasil × Haiti ★
+  'E1R2',  // Alemanha × Costa do Marfim
+  'H2R2',  // Uruguai × Cabo Verde
+  'J1R2',  // Argentina × Áustria
+  'L1R2',  // Inglaterra × Gana
+  // Rodada 3 — 1 jogo confirmado
+  'C1R3',  // Escócia × Brasil ★
+]);
 
-function getTVChannels(matchId, type) {
+// No mata-mata, verifica dinamicamente se Brasil está no jogo para incluir SBT
+function getTVChannels(matchId, type, homeTeam, awayTeam) {
   const channels = [];
-  const isGlobo = type === 'ko' || GLOBO_GAMES.has(matchId);
-  const isSbt   = SBT_GAMES.has(matchId);
+  // Globo tem prioridade de escolha no mata-mata → todos os jogos KO passam na Globo
+  const isGlobo = GLOBO_GAMES.has(matchId) || type === 'ko';
+  // SBT: jogos de grupo confirmados + todos os jogos do Brasil no mata-mata
+  const brasilKo = type === 'ko' && (homeTeam === 'Brasil' || awayTeam === 'Brasil');
+  const isSbt = SBT_GAMES.has(matchId) || brasilKo;
 
-  if (isGlobo) channels.push({name:'Globo', cls:'tv-globo'});
-  if (isSbt)   channels.push({name:'SBT',   cls:'tv-sbt'});
+  if (isGlobo) channels.push({name:'Globo',  cls:'tv-globo'});
+  if (isSbt)   channels.push({name:'SBT',    cls:'tv-sbt'});
   if (isGlobo) channels.push({name:'SporTV', cls:'tv-sportv'});
   channels.push({name:'CazéTV', cls:'tv-caze', link:'https://www.youtube.com/@CazéTV'});
   return channels;
@@ -787,7 +823,10 @@ function renderGroupCard(gk) {
             ${flag(m.home, true)}
           </div>
           ${hasR
-            ? `<span class="score-display">${r.home} × ${r.away}</span>`
+            ? `<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                <span class="score-display">${r.home} × ${r.away}</span>
+                ${_autoSavedIds.has(m.id) ? `<span style="font-size:.6rem;color:var(--gold);opacity:.8">🤖 auto</span>` : ''}
+               </div>`
             : `<div class="score-area">
                 <input class="score-input" type="number" min="0" max="99" id="h-${m.id}" placeholder="0">
                 <span class="score-sep">×</span>
@@ -1030,6 +1069,8 @@ function renderKoMatch(m, isFinalStyle) {
   const an = koTeamName(m.id,'away',m.al);
   const winnerIsHome = hasR && r.winner === hn;
   const winnerIsAway = hasR && r.winner === an;
+  const isAuto = _autoSavedIds.has(m.id);
+  const needsPen = hasR && r.pen === '?'; // auto-salvo em empate — precisa do vencedor de pênaltis
 
   let h = `<div class="ko-match ${isFinalStyle?'final-card':''}">
     <div class="ko-head">
@@ -1058,9 +1099,25 @@ function renderKoMatch(m, isFinalStyle) {
     <div class="ko-foot">`;
 
   if (hasR) {
-    if (r.ext) h += `<span style="font-size:.72rem;color:var(--gold)">Prorr: ${r.ext}</span>`;
-    if (r.pen) h += `<span style="font-size:.72rem;color:var(--magenta)">Pên: ${r.pen}</span>`;
-    if (r.winner) h += `<span class="badge badge-green">🏆 ${flag(r.winner)} ${r.winner}</span>`;
+    if (isAuto) h += `<span style="font-size:.6rem;color:var(--gold);opacity:.8;margin-right:4px">🤖 auto</span>`;
+    if (r.ext && r.ext !== '') h += `<span style="font-size:.72rem;color:var(--gold)">Prorr.: ${r.ext}</span>`;
+    if (needsPen) {
+      // Empate após ET — precisa do vencedor dos pênaltis
+      h += `<span style="font-size:.72rem;color:var(--magenta);font-weight:700">⚠️ Insira pênaltis:</span>
+        <div class="ko-extras" style="margin-top:4px">
+          <label>Pên (placar):</label><input type="text" id="kp-${m.id}" placeholder="5-4">
+          <label>Vencedor:</label>
+          <select id="kw-${m.id}" style="background:#1a1a2e;color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:2px">
+            <option value="">Selecione</option>
+            <option value="${hn}">${hn}</option>
+            <option value="${an}">${an}</option>
+          </select>
+        </div>
+        <button class="btn-save" style="margin-top:4px" onclick="savePenWinner('${m.id}')">💾 Confirmar</button>`;
+    } else {
+      if (r.pen && r.pen !== '?') h += `<span style="font-size:.72rem;color:var(--magenta)">Pên: ${r.pen}</span>`;
+      if (r.winner) h += `<span class="badge badge-green">🏆 ${flag(r.winner)} ${r.winner}</span>`;
+    }
     h += `<button class="btn-edit" onclick="editKo('${m.id}')">✏️ Editar</button>`;
   } else {
     h += `<div class="ko-extras">
@@ -1164,8 +1221,21 @@ function saveKo(id) {
 
 function editKo(id) {
   delete koResults[id];
+  _autoSavedIds.delete(id);
   saveState();
   refreshKo();
+}
+
+function savePenWinner(id) {
+  const r = koResults[id];
+  if (!r) return;
+  const penEl = document.getElementById('kp-' + id);
+  const winEl = document.getElementById('kw-' + id);
+  if (!winEl || !winEl.value) { alert('Selecione o vencedor dos pênaltis.'); return; }
+  r.pen    = penEl ? penEl.value.trim() : '';
+  r.winner = winEl.value;
+  saveState();
+  refreshAll();
 }
 
 function refreshKo() {
@@ -1276,9 +1346,11 @@ const ESPN_NAME_MAP = {
   'England':'Inglaterra','Croatia':'Croácia','Ghana':'Gana','Panama':'Panamá',
 };
 
-let _liveData = {}; // { espnId: {homeScore, awayScore, status, homeName, awayName} }
+let _liveData = {};
 let _lastFetch = null;
-let _liveInterval = null;
+let _liveInterval = null;   // intervalo da aba Hoje (60s)
+let _globalInterval = null; // intervalo global de auto-save (3 min)
+const _autoSavedIds = new Set(); // IDs salvos automaticamente
 
 async function fetchLiveScores() {
   try {
@@ -1288,32 +1360,109 @@ async function fetchLiveScores() {
     const data = await r.json();
     const events = data.events || [];
     const newLive = {};
+    let anyNewSave = false;
+
     events.forEach(ev => {
       const comp = ev.competitions && ev.competitions[0];
       if (!comp) return;
-      const st = comp.status && comp.status.type;
-      const competitors = comp.competitors || [];
-      if (competitors.length < 2) return;
-      const home = competitors.find(c => c.homeAway === 'home') || competitors[0];
-      const away = competitors.find(c => c.homeAway === 'away') || competitors[1];
-      const homeEn = home.team && home.team.displayName;
-      const awayEn = away.team && away.team.displayName;
+      const st    = comp.status && comp.status.type;
+      const comps = comp.competitors || [];
+      if (comps.length < 2) return;
+
+      const homeC = comps.find(c => c.homeAway === 'home') || comps[0];
+      const awayC = comps.find(c => c.homeAway === 'away') || comps[1];
+      const homeEn = homeC.team && homeC.team.displayName;
+      const awayEn = awayC.team && awayC.team.displayName;
       const homePt = ESPN_NAME_MAP[homeEn] || homeEn;
       const awayPt = ESPN_NAME_MAP[awayEn] || awayEn;
-      newLive[`${homePt}|${awayPt}`] = {
-        homeScore: home.score,
-        awayScore: away.score,
-        state: st && st.state,      // 'pre','in','post'
-        completed: st && st.completed,
-        homeTeam: homePt,
-        awayTeam: awayPt,
-        clock: comp.status && comp.status.displayClock,
-      };
+      const homeScore = parseInt(homeC.score) || 0;
+      const awayScore = parseInt(awayC.score) || 0;
+      const state     = st && st.state;
+      const completed = !!(st && st.completed);
+      // ESPN detail: "FT" / "FT AET" / "Pen" / "HT" / "45:00" etc.
+      const detail    = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
+      const clock     = comp.status && comp.status.displayClock;
+
+      newLive[`${homePt}|${awayPt}`] = { homeScore, awayScore, state, completed, homeTeam: homePt, awayTeam: awayPt, clock, detail };
+
+      if (!completed) return;
+
+      // ── AUTO-SAVE GRUPOS ──────────────────────────────────────
+      const gm = GROUP_MATCHES.find(m =>
+        (m.home === homePt && m.away === awayPt) ||
+        (m.home === awayPt && m.away === homePt)
+      );
+      if (gm && !results[gm.id]) {
+        const rev = gm.home === awayPt;
+        results[gm.id] = rev
+          ? { home: awayScore, away: homeScore }
+          : { home: homeScore, away: awayScore };
+        _autoSavedIds.add(gm.id);
+        anyNewSave = true;
+      }
+
+      // ── AUTO-SAVE MATA-MATA (apenas quando há vencedor claro) ─
+      // Detecta ET/Penaltis via detail string
+      const isET  = /aet|prorr/i.test(detail);
+      const isPen = /pen/i.test(detail);
+      // Para partidas que foram a prorrogação/pênaltis precisamos saber o placar
+      // da prorrogação. ESPN usa scores regulares mesmo em ET, então se
+      // placar final != 0-0 e completed → auto-salvamos.
+      // Se empatado (EP/Pen), deixamos para o usuário inserir manualmente
+      // pois precisamos do vencedor de pênaltis.
+      const allKoMatches = Object.values(KO_ROUNDS).flatMap(rnd => rnd.matches);
+      const km = allKoMatches.find(m => {
+        const hn = koTeamName(m.id, 'home', m.hl);
+        const an = koTeamName(m.id, 'away', m.al);
+        return (hn === homePt && an === awayPt) || (hn === awayPt && an === homePt);
+      });
+      if (km && !koResults[km.id]) {
+        const rev = (() => {
+          const hn = koTeamName(km.id, 'home', km.hl);
+          return hn === awayPt;
+        })();
+        const fh = rev ? awayScore : homeScore;
+        const fa = rev ? homeScore : awayScore;
+        const hn = koTeamName(km.id, 'home', km.hl);
+        const an = koTeamName(km.id, 'away', km.al);
+
+        if (fh !== fa) {
+          // Resultado normal ou ET com placar diferente
+          koResults[km.id] = {
+            home: fh, away: fa,
+            homeTeam: hn, awayTeam: an,
+            winner: fh > fa ? hn : an,
+            ext: isET ? 'ET' : '', pen: ''
+          };
+          _autoSavedIds.add(km.id);
+          anyNewSave = true;
+        } else if (isPen) {
+          // Empatado — precisa do vencedor dos pênaltis (não auto-salvamos winner)
+          // Salvamos placar mas sem winner para avisar o usuário
+          koResults[km.id] = {
+            home: fh, away: fa,
+            homeTeam: hn, awayTeam: an,
+            winner: '', ext: 'ET', pen: '?'
+          };
+          _autoSavedIds.add(km.id);
+          anyNewSave = true;
+        }
+      }
     });
+
     _liveData = newLive;
     _lastFetch = new Date();
-    renderTodayTab();
-  } catch(e) { /* sem internet ou CORS bloqueado — ignora */ }
+
+    if (anyNewSave) {
+      saveState();
+      refreshAll();
+    }
+
+    // Atualizar aba Hoje se estiver ativa
+    const activeTab = document.querySelector('.tab-content.active');
+    if (activeTab && activeTab.id === 'tab-hoje') renderTodayTab();
+
+  } catch(e) { /* sem internet ou CORS — ignora */ }
 }
 
 function getLiveInfo(homeTeam, awayTeam) {
@@ -1327,6 +1476,12 @@ function startLivePolling() {
 }
 function stopLivePolling() {
   if (_liveInterval) { clearInterval(_liveInterval); _liveInterval = null; }
+}
+// Polling global independente de aba — auto-salva resultados a cada 3 min
+function startGlobalPolling() {
+  if (_globalInterval) return;
+  fetchLiveScores(); // primeira chamada imediata
+  _globalInterval = setInterval(fetchLiveScores, 180000);
 }
 
 function isMatchLiveNow(matchTimeStr, matchDate) {
@@ -1438,7 +1593,7 @@ function renderTodayTab() {
         scoreBlock = `<span class="today-score-ph">${isToday||isPast ? '— × —' : m.time}</span>`;
       }
 
-      const tvChannels = getTVChannels(m.id, m.type);
+      const tvChannels = getTVChannels(m.id, m.type, m.home, m.away);
       const tvHtml = tvChannels.map(ch =>
         ch.link
           ? `<a class="tv-badge ${ch.cls}" href="${ch.link}" target="_blank" rel="noopener">▶ ${ch.name}</a>`
@@ -1518,6 +1673,8 @@ loadState();
 renderGroups();
 updateBrasilBanner();
 updatePhaseIndicator();
+// Inicia polling global (a cada 3 min) para auto-salvar resultados
+startGlobalPolling();
 </script>
 </body>
 </html>
