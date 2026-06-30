@@ -540,15 +540,14 @@ main{
 .ko-head-date{color:var(--electric);font-weight:700;letter-spacing:.4px;white-space:nowrap}
 .ko-head-city{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;text-align:right}
 .ko-body{padding:12px 14px}
-.ko-row{display:flex;align-items:center;gap:8px;padding:6px 0;min-width:0}
+.ko-row{display:flex;align-items:center;gap:8px;padding:6px 0;min-width:0;overflow:hidden}
 .ko-team-name{flex:1;font-weight:600;font-size:.88rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ko-team-name.ph{color:var(--gray-mid);font-style:italic;font-weight:400;font-size:.82rem}
 .ko-row.winner{
   background:linear-gradient(90deg,rgba(10,172,220,.1),rgba(0,166,81,.06));
-  border-radius:8px;padding:7px 10px;margin:0 -6px;
+  border-radius:8px;padding:6px 10px;
   border-left:3px solid var(--electric);
 }
-.ko-team-name{flex:1;font-weight:600;font-size:.9rem}
-.ko-team-name.ph{color:var(--gray-mid);font-style:italic;font-weight:400;font-size:.82rem}
 .ko-score-val{
   font-size:1.25rem;font-weight:800;
   color:var(--gold-l);min-width:26px;text-align:center;
@@ -1117,88 +1116,69 @@ const KO_ROUNDS = {
 };
 
 // ─────────────────────────────────────────────
-// TRANSMISSÃO
-// Fonte: jornaldaparaiba.com.br + sports.sbt.com.br + lance.com.br (jun/2026)
-// CazéTV transmite TODOS os 104 jogos (YouTube gratuito)
-// Globo/SporTV: ~55 jogos | SBT/NSports: 32 jogos
-// No mata-mata, Globo tem prioridade de escolha (picks first)
+// TRANSMISSÃO — Copa 2026
+// Fonte: bolavip.com / lance.com.br / olympics.com (jun/2026)
+// CazéTV: TODOS os 104 jogos (YouTube gratuito)
+// Globo/SporTV: ~55 jogos | SBT/NSports: ~32 jogos
 // ─────────────────────────────────────────────
 
-// Jogos confirmados na Globo + SporTV
+// Fase de grupos — Globo/SporTV
 const GLOBO_GAMES = new Set([
-  // RODADA 1 — 13 jogos (Globo escolhe 1ª na R1)
-  'A1R1',  // México × África do Sul         — 11/06 16h
-  'D1R1',  // EUA × Paraguai                 — 12/06 22h
-  'C1R1',  // Brasil × Marrocos              — 13/06 19h ★
-  'D2R1',  // Austrália × Turquia            — 14/06 01h
-  'F1R1',  // Holanda × Japão                — 14/06 17h
-  'E2R1',  // Costa do Marfim × Equador      — 14/06 20h
-  'F2R1',  // Suécia × Tunísia               — 14/06 23h
-  'G1R1',  // Bélgica × Egito                — 15/06 16h
-  'H2R1',  // Arábia Saudita × Uruguai       — 15/06 19h
-  'I1R1',  // França × Senegal               — 16/06 16h
-  'J2R1',  // Áustria × Jordânia             — 17/06 01h
-  'L1R1',  // Inglaterra × Croácia           — 17/06 17h
-  'K2R1',  // Uzbequistão × Colômbia         — 17/06 23h
-
-  // RODADA 2 — 13 jogos (Globo escolhe 2ª na R2)
-  'B1R2',  // Suíça × Bósnia-Herzegovina     — 18/06 16h
-  'A2R2',  // México × Coreia do Sul         — 18/06 22h
-  'C2R2',  // Brasil × Haiti                 — 19/06 21h30 ★
-  'D1R2',  // Turquia × Paraguai             — 20/06 00h
-  'E1R2',  // Alemanha × Costa do Marfim     — 20/06 17h
-  'F2R2',  // Tunísia × Japão               — 21/06 01h
-  'H2R2',  // Uruguai × Cabo Verde           — 21/06 19h
-  'G2R2',  // Nova Zelândia × Egito          — 21/06 22h
-  'J1R2',  // Argentina × Áustria            — 22/06 14h
-  'I2R2',  // Noruega × Senegal              — 22/06 21h
-  'J2R2',  // Jordânia × Argélia             — 23/06 00h
-  'L1R2',  // Inglaterra × Gana              — 23/06 17h
-  'K2R2',  // Colômbia × RD Congo            — 23/06 23h
-
-  // RODADA 3 — 10 jogos confirmados (fonte: jornaldaparaiba.com.br)
-  'C1R3',  // Escócia × Brasil               — 24/06 19h ★
-  'A1R3',  // Rep. Tcheca × México           — 24/06 22h
-  'E1R3',  // Equador × Alemanha             — 25/06 17h
-  'F1R3',  // Japão × Suécia                 — 25/06 20h
-  'D1R3',  // Turquia × EUA                  — 25/06 23h
-  'I1R3',  // Noruega × França               — 26/06 16h
-  'H2R3',  // Uruguai × Espanha              — 26/06 21h
-  'G1R3',  // Egito × Irã                    — 27/06 00h
-  'L1R3',  // Panamá × Inglaterra            — 27/06 18h
-  'J1R3',  // Argélia × Áustria              — 27/06 23h
+  // R1
+  'A1R1','D1R1','C1R1','D2R1','F1R1','E2R1','F2R1',
+  'G1R1','H2R1','I1R1','J2R1','L1R1','K2R1',
+  // R2
+  'B1R2','A2R2','C2R2','D1R2','E1R2','F2R2',
+  'H2R2','G2R2','J1R2','I2R2','J2R2','L1R2','K2R2',
+  // R3
+  'C1R3','A1R3','E1R3','F1R3','D1R3','I1R3','H2R3','G1R3','L1R3','J1R3',
 ]);
 
-// SBT/NSports: 14 jogos confirmados em junho (fonte: sports.sbt.com.br)
-// Todos os jogos do SBT também passam na Globo (sublicenciamento via CazéTV)
+// Fase de grupos — SBT/NSports
 const SBT_GAMES = new Set([
-  // Rodada 1 — 7 jogos
-  'A1R1',  // México × África do Sul
-  'D1R1',  // EUA × Paraguai
-  'C1R1',  // Brasil × Marrocos ★
-  'F1R1',  // Holanda × Japão
-  'H2R1',  // Arábia Saudita × Uruguai
-  'I1R1',  // França × Senegal
-  'L1R1',  // Inglaterra × Croácia
-  // Rodada 2 — 6 jogos
-  'B1R2',  // Suíça × Bósnia-Herzegovina
-  'C2R2',  // Brasil × Haiti ★
-  'E1R2',  // Alemanha × Costa do Marfim
-  'H2R2',  // Uruguai × Cabo Verde
-  'J1R2',  // Argentina × Áustria
-  'L1R2',  // Inglaterra × Gana
-  // Rodada 3 — 1 jogo confirmado
-  'C1R3',  // Escócia × Brasil ★
+  'A1R1','D1R1','C1R1','F1R1','H2R1','I1R1','L1R1',   // R1
+  'B1R2','C2R2','E1R2','H2R2','J1R2','L1R2',            // R2
+  'C1R3',                                                // R3
 ]);
 
-// No mata-mata, verifica dinamicamente se Brasil está no jogo para incluir SBT
+// Rodada de 32 — canais confirmados (fonte: bolavip.com, jun/2026)
+// true = passa na Globo/SBT; false = apenas CazéTV
+const R32_TV = {
+  R32_1:  {globo:false, sbt:false},  // África do Sul × Canadá      — 28/06 16h  — só CazéTV
+  R32_4:  {globo:true,  sbt:true },  // Brasil × Japão               — 29/06 14h
+  R32_2:  {globo:true,  sbt:true },  // Alemanha × Paraguai          — 29/06 17h30
+  R32_3:  {globo:false, sbt:false},  // Holanda × Marrocos           — 29/06 22h  — só CazéTV
+  R32_6:  {globo:true,  sbt:true },  // Costa do Marfim × Noruega   — 30/06 14h
+  R32_5:  {globo:false, sbt:false},  // França × Suécia              — 30/06 18h  — só CazéTV
+  R32_7:  {globo:true,  sbt:false},  // México × Equador             — 30/06 22h
+  R32_8:  {globo:false, sbt:false},  // Inglaterra × RD Congo        — 01/07 13h  — só CazéTV
+  R32_10: {globo:true,  sbt:true },  // Bélgica × Senegal            — 01/07 17h
+  R32_9:  {globo:false, sbt:false},  // EUA × Bósnia-Herzegovina     — 01/07 21h  — só CazéTV
+  R32_12: {globo:true,  sbt:true },  // Espanha × Áustria            — 02/07 16h
+  R32_11: {globo:false, sbt:false},  // Portugal × Croácia           — 02/07 20h  — só CazéTV
+  R32_13: {globo:false, sbt:false},  // Suíça × Argélia              — 03/07 00h  — só CazéTV
+  R32_16: {globo:true,  sbt:false},  // Austrália × Egito            — 03/07 15h
+  R32_14: {globo:true,  sbt:true },  // Argentina × Cabo Verde       — 03/07 19h
+  R32_15: {globo:false, sbt:false},  // Colômbia × Gana              — 03/07 22h30 — só CazéTV
+};
+
 function getTVChannels(matchId, type, homeTeam, awayTeam) {
   const channels = [];
-  // Globo tem prioridade de escolha no mata-mata → todos os jogos KO passam na Globo
-  const isGlobo = GLOBO_GAMES.has(matchId) || type === 'ko';
-  // SBT: jogos de grupo confirmados + todos os jogos do Brasil no mata-mata
-  const brasilKo = type === 'ko' && (homeTeam === 'Brasil' || awayTeam === 'Brasil');
-  const isSbt = SBT_GAMES.has(matchId) || brasilKo;
+  let isGlobo, isSbt;
+
+  if (R32_TV[matchId] !== undefined) {
+    // Rodada de 32: canais confirmados por jogo
+    isGlobo = R32_TV[matchId].globo;
+    isSbt   = R32_TV[matchId].sbt;
+  } else if (type === 'ko') {
+    // Oitavas em diante: Globo cobre tudo; SBT apenas Brasil
+    isGlobo = true;
+    isSbt   = homeTeam === 'Brasil' || awayTeam === 'Brasil';
+  } else {
+    // Fase de grupos
+    isGlobo = GLOBO_GAMES.has(matchId);
+    isSbt   = SBT_GAMES.has(matchId);
+  }
 
   if (isGlobo) channels.push({name:'Globo',  cls:'tv-globo'});
   if (isSbt)   channels.push({name:'SBT',    cls:'tv-sbt'});
