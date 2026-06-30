@@ -549,8 +549,8 @@ main{
   border-left:3px solid var(--electric);
 }
 .ko-score-val{
-  font-size:1.25rem;font-weight:800;
-  color:var(--gold-l);min-width:26px;text-align:center;
+  font-size:1rem;font-weight:800;
+  color:var(--gold-l);min-width:22px;text-align:center;flex-shrink:0;
 }
 .ko-score-input{
   width:42px;height:36px;
@@ -1621,24 +1621,31 @@ function seedResults() {
 
 // ─────────────────────────────────────────────
 // RESULTADOS CONFIRMADOS — RODADA DE 32
-// Fonte: FIFA.com / CBS Sports / Yahoo Sports (29/06/2026)
+// Fonte: FIFA.com / bolavip.com / CNN Brasil (30/06/2026)
 // ─────────────────────────────────────────────
 const SEED_KO_RESULTS = {
-  // 28/06 Dom — R32_1: Africa do Sul × Canadá (Los Angeles)
+  // 28/06 Dom
   R32_1: { home:0, away:1, homeTeam:'África do Sul', awayTeam:'Canadá',
             winner:'Canadá', ext:'', pen:'' },
-  // 29/06 Seg — R32_4: Brasil × Japão (Houston) — Brasil vence com Martinelli no fim
+  // 29/06 Seg
   R32_4: { home:2, away:1, homeTeam:'Brasil', awayTeam:'Japão',
             winner:'Brasil', ext:'', pen:'' },
-  // 29/06 Seg — R32_2: Alemanha × Paraguai (Boston) — Pênaltis 3-4 para Paraguai
   R32_2: { home:1, away:1, homeTeam:'Alemanha', awayTeam:'Paraguai',
             winner:'Paraguai', ext:'ET', pen:'3-4' },
+  R32_3: { home:1, away:1, homeTeam:'Holanda', awayTeam:'Marrocos',
+            winner:'Marrocos', ext:'ET', pen:'2-3' },
+  // 30/06 Ter
+  R32_6: { home:1, away:2, homeTeam:'Costa do Marfim', awayTeam:'Noruega',
+            winner:'Noruega', ext:'', pen:'' },
 };
 
 function seedKoResults() {
   let added = 0;
   Object.entries(SEED_KO_RESULTS).forEach(([id, r]) => {
-    if (!koResults[id]) { koResults[id] = r; added++; }
+    // Força atualização se o resultado salvo não tem vencedor mas o seed tem
+    if (!koResults[id] || (!koResults[id].winner && r.winner)) {
+      koResults[id] = r; added++;
+    }
   });
   if (added > 0) { saveState(); }
 }
