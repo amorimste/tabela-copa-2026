@@ -1637,6 +1637,10 @@ const SEED_KO_RESULTS = {
   // 30/06 Ter
   R32_6: { home:1, away:2, homeTeam:'Costa do Marfim', awayTeam:'Noruega',
             winner:'Noruega', ext:'', pen:'' },
+  R32_5: { home:3, away:0, homeTeam:'França', awayTeam:'Suécia',
+            winner:'França', ext:'', pen:'' },
+  R32_7: { home:2, away:0, homeTeam:'México', awayTeam:'Equador',
+            winner:'México', ext:'', pen:'' },
 };
 
 function seedKoResults() {
@@ -2138,34 +2142,42 @@ function _processEspnEvents(events) {
     const km = allKo.find(m => {
       const hn = koTeamName(m.id,'home',m.hl);
       const an = koTeamName(m.id,'away',m.al);
-      return (hn===homePt&&an===awayPt)||(hn===awayPt&&an===homePt);
+      // Match completo (ambos os times resolvidos)
+      if ((hn===homePt&&an===awayPt)||(hn===awayPt&&an===homePt)) return true;
+      // Match parcial: um time é placeholder — busca pelo time conhecido
+      const ph_hn = isPlaceholder(hn), ph_an = isPlaceholder(an);
+      if (!ph_hn && ph_an && (hn===homePt||hn===awayPt)) return true;
+      if (ph_hn && !ph_an && (an===homePt||an===awayPt)) return true;
+      return false;
     });
     if (km && !koResults[km.id]) {
-      const rev = koTeamName(km.id,'home',km.hl) === awayPt;
+      const hn_r = koTeamName(km.id,'home',km.hl);
+      // rev: true se o time que é "home" no nosso app aparece como "away" na ESPN
+      const rev = (!isPlaceholder(hn_r) && hn_r === awayPt)
+               || (isPlaceholder(hn_r) && !isPlaceholder(koTeamName(km.id,'away',km.al)) && koTeamName(km.id,'away',km.al) === homePt);
       const fh = rev ? awayScore : homeScore;
       const fa = rev ? homeScore : awayScore;
-      const hn = koTeamName(km.id,'home',km.hl);
-      const an = koTeamName(km.id,'away',km.al);
+      // Usa os nomes reais da ESPN quando o nosso lado ainda é placeholder
+      const finalHn = isPlaceholder(hn_r) ? (rev ? awayPt : homePt) : hn_r;
+      const an_r    = koTeamName(km.id,'away',km.al);
+      const finalAn = isPlaceholder(an_r) ? (rev ? homePt : awayPt) : an_r;
 
-      // Determina vencedor: usa campo winner do ESPN (cobre pênaltis também)
+      // Vencedor via ESPN (cobre pênaltis)
       let winner = '';
       const espnWinnerHome = homeC.winner === true;
       const espnWinnerAway = awayC.winner === true;
-      if (espnWinnerHome) winner = rev ? an : hn;
-      else if (espnWinnerAway) winner = rev ? hn : an;
-      else if (fh !== fa) winner = fh > fa ? hn : an;
+      if (espnWinnerHome) winner = rev ? finalAn : finalHn;
+      else if (espnWinnerAway) winner = rev ? finalHn : finalAn;
+      else if (fh !== fa) winner = fh > fa ? finalHn : finalAn;
 
-      // Placar de pênaltis — ESPN às vezes expõe em shootoutScore ou notes
+      // Placar de pênaltis
       let penScore = '';
       if (isPen) {
         const homePen = homeC.shootoutScore || '';
         const awayPen = awayC.shootoutScore || '';
         if (homePen !== '' && awayPen !== '') {
-          const phScore = rev ? awayPen : homePen;
-          const paScore = rev ? homePen : awayPen;
-          penScore = `${phScore}-${paScore}`;
+          penScore = rev ? `${awayPen}-${homePen}` : `${homePen}-${awayPen}`;
         } else {
-          // Tenta extrair do detail (ex: "5-3 After Penalty Kicks")
           const penMatch = detail.match(/(\d+)[–\-](\d+)/);
           penScore = penMatch ? `${penMatch[1]}-${penMatch[2]}` : 'PEN';
         }
@@ -2174,7 +2186,7 @@ function _processEspnEvents(events) {
       if (winner) {
         koResults[km.id] = {
           home: fh, away: fa,
-          homeTeam: hn, awayTeam: an,
+          homeTeam: finalHn, awayTeam: finalAn,
           winner,
           ext: (isET || isPen) ? 'ET' : '',
           pen: penScore
@@ -2274,7 +2286,19 @@ async function fetchLiveScores() {
 }
 
 function getLiveInfo(homeTeam, awayTeam) {
-  return _liveData[`${homeTeam}|${awayTeam}`] || null;
+  const direct = _liveData[`${homeTeam}|${awayTeam}`];
+  if (direct) return direct;
+  // Fallback quando um dos times ainda é placeholder: busca pelo time conhecido
+  const ph_H = isPlaceholder(homeTeam);
+  const ph_A = isPlaceholder(awayTeam);
+  if (ph_H === ph_A) return null; // ambos conhecidos (sem match direto) ou ambos placeholder
+  const known = ph_H ? awayTeam : homeTeam;
+  const knownIsHome = !ph_H;
+  for (const e of Object.values(_liveData)) {
+    if (knownIsHome && e.homeTeam === known) return e;
+    if (!knownIsHome && e.awayTeam === known) return e;
+  }
+  return null;
 }
 
 function startLivePolling() {
