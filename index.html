@@ -408,11 +408,11 @@ main{
   padding:1px 8px;border-radius:4px;font-weight:600;
 }
 .match-line{display:flex;align-items:center;gap:8px}
-.team-side{display:flex;align-items:center;gap:7px;flex:1}
+.team-side{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
 .team-side.home{justify-content:flex-end}
 .team-side.away{justify-content:flex-start}
 .team-flag-big{font-size:1.8rem;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;line-height:1;flex-shrink:0}
-.team-name-text{font-size:.85rem;font-weight:600;color:#fff;white-space:nowrap}
+.team-name-text{font-size:.85rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .score-area{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .score-input{
   width:40px;height:36px;
@@ -426,12 +426,12 @@ main{
 .score-input:focus{outline:none;border-color:var(--electric);background:rgba(10,172,220,.1)}
 .score-sep{color:var(--gray-mid);font-weight:700;font-size:1rem}
 .score-display{
-  font-size:1.1rem;font-weight:800;
+  font-size:.88rem;font-weight:800;
   color:#fff;
-  padding:5px 14px;
+  padding:4px 10px;
   background:linear-gradient(135deg,rgba(10,172,220,.2),rgba(10,172,220,.1));
   border:1px solid rgba(10,172,220,.3);
-  border-radius:6px;min-width:64px;text-align:center;
+  border-radius:6px;min-width:52px;text-align:center;
   flex-shrink:0;letter-spacing:2px;
   box-shadow:0 0 12px rgba(10,172,220,.15);
 }
@@ -549,8 +549,8 @@ main{
   border-left:3px solid var(--electric);
 }
 .ko-score-val{
-  font-size:1rem;font-weight:800;
-  color:var(--gold-l);min-width:22px;text-align:center;flex-shrink:0;
+  font-size:.82rem;font-weight:800;
+  color:var(--gold-l);min-width:18px;text-align:center;flex-shrink:0;
 }
 .ko-score-input{
   width:42px;height:36px;
@@ -658,11 +658,11 @@ main{
 .today-team.home{justify-content:flex-end;flex-direction:row-reverse}
 .today-tname{font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .today-score-box{
-  font-size:1.35rem;font-weight:800;
+  font-size:1.1rem;font-weight:800;
   color:#fff;
   background:linear-gradient(135deg,rgba(10,172,220,.22),rgba(10,172,220,.1));
   border:1px solid rgba(10,172,220,.35);
-  padding:7px 18px;border-radius:8px;min-width:74px;
+  padding:5px 14px;border-radius:8px;min-width:64px;
   text-align:center;flex-shrink:0;letter-spacing:3px;
   box-shadow:0 0 20px rgba(10,172,220,.2);
 }
@@ -2534,7 +2534,7 @@ function renderBracketView() {
 
   // Scale to fill container on desktop; fixed on mobile (horizontal scroll)
   const containerW = container.offsetWidth || window.innerWidth;
-  const scale = isMobile ? 1 : Math.min(1.08, Math.max(0.68, (containerW - 8) / TOTAL_W));
+  const scale = isMobile ? 1 : Math.min(1.08, Math.max(0.68, (containerW - 32) / TOTAL_W));
   const outerH = Math.ceil(TOTAL_H * scale);
 
   // ── Line helpers ──────────────────────────────────────────────────
@@ -2623,7 +2623,7 @@ function renderBracketView() {
   const RQrt = ['QRT_3','QRT_4'];
 
   // ── Outer wrapper: fixed height = scaled height, overflow hidden on desktop ──
-  let h = `<div style="width:100%;height:${outerH}px;overflow-x:${isMobile?'auto':'hidden'};overflow-y:hidden;-webkit-overflow-scrolling:touch;position:relative">
+  let h = `<div style="width:100%;height:${outerH}px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;position:relative">
   <div style="position:absolute;width:${TOTAL_W}px;height:${TOTAL_H}px;transform:scale(${scale.toFixed(4)});transform-origin:top left">
   <div style="position:relative;width:${TOTAL_W}px;height:${TOTAL_H}px">`;
 
