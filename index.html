@@ -2229,7 +2229,10 @@ async function syncHistoricalScores() {
 
 async function fetchLiveScores() {
   try {
-    const url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
+    // Sempre usa a data de hoje para garantir que pega os jogos corretos
+    const now = new Date();
+    const ds = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+    const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${ds}&limit=20`;
     const r = await fetch(url, {cache:'no-cache'});
     if (!r.ok) return;
     const data = await r.json();
@@ -2246,13 +2249,17 @@ async function fetchLiveScores() {
       const awayC = comps.find(c => c.homeAway === 'away') || comps[1];
       const homePt = ESPN_NAME_MAP[homeC.team && homeC.team.displayName] || (homeC.team && homeC.team.displayName);
       const awayPt = ESPN_NAME_MAP[awayC.team && awayC.team.displayName] || (awayC.team && awayC.team.displayName);
-      const homeScore = parseInt(homeC.score) || 0;
-      const awayScore = parseInt(awayC.score) || 0;
-      const state     = st && st.state;
+      if (!homePt || !awayPt) return;
+      const homeScore = parseInt(homeC.score);
+      const awayScore = parseInt(awayC.score);
+      const state     = st && st.state;           // 'pre' | 'in' | 'post'
       const completed = !!(st && st.completed);
       const detail    = (st && st.shortDetail) || '';
-      const clock     = comp.status && comp.status.displayClock;
-      newLive[`${homePt}|${awayPt}`] = {homeScore,awayScore,state,completed,homeTeam:homePt,awayTeam:awayPt,clock,detail};
+      const clock     = (comp.status && comp.status.displayClock) || '';
+      // Guarda por ambas as ordens para facilitar lookup
+      const entry = {homeScore,awayScore,state,completed,homeTeam:homePt,awayTeam:awayPt,clock,detail};
+      newLive[`${homePt}|${awayPt}`] = entry;
+      newLive[`${awayPt}|${homePt}`] = {...entry, homeScore:awayScore, awayScore:homeScore, homeTeam:awayPt, awayTeam:homePt};
     });
 
     _liveData = newLive;
@@ -2378,17 +2385,29 @@ function renderTodayTab() {
       // Verificar dados ao vivo da ESPN
       const live = getLiveInfo(m.home, m.away);
       const isLiveNow = isToday && isMatchLiveNow(m.time, dayData.d);
-      const showLive = live && (live.state === 'in');
-      const showCompleted = live && live.completed && !hasR;
+
+      const isLive      = live && live.state === 'in';
+      const isDone      = live && (live.state === 'post' || live.completed);
+      const hasEspn     = live && !isNaN(live.homeScore) && !isNaN(live.awayScore);
 
       let scoreBlock;
       if (hasR) {
-        scoreBlock = `<span class="today-score-box">${r.home} × ${r.away}</span>`;
-      } else if (showLive) {
-        scoreBlock = `<span class="today-score-box live-score">🔴 ${live.homeScore} × ${live.awayScore} <small>${live.clock||''}</small></span>`;
-      } else if (showCompleted) {
+        // Resultado confirmado (seed ou manual) — sempre prioridade
+        const isPastLive = isLive && hasEspn;
+        const liveTag = isPastLive ? `<small style="font-size:.65em;opacity:.7;margin-left:3px">${live.clock}</small>` : '';
+        scoreBlock = `<span class="today-score-box">${r.home} × ${r.away}${liveTag}</span>`;
+      } else if (isLive && hasEspn) {
+        // AO VIVO — placar em tempo real da ESPN
+        const clk = live.clock ? `<small style="font-size:.65em;opacity:.8;margin-left:4px">${live.clock}'</small>` : '';
+        scoreBlock = `<span class="today-score-box live-score">🔴 ${live.homeScore} × ${live.awayScore}${clk}</span>`;
+      } else if (isDone && hasEspn) {
+        // Encerrado — ESPN confirma o placar final (antes de salvar/seedar)
+        scoreBlock = `<span class="today-score-box">${live.homeScore} × ${live.awayScore} <small style="font-size:.62em;opacity:.6">FIM</small></span>`;
+      } else if (hasEspn) {
+        // ESPN tem dados mas estado incerto — mostra o placar mesmo assim
         scoreBlock = `<span class="today-score-box">${live.homeScore} × ${live.awayScore}</span>`;
-      } else if (isLiveNow && !hasR) {
+      } else if (isLiveNow) {
+        // Sem dados ESPN mas horário indica que está ao vivo
         scoreBlock = `<span class="today-score-box live-score">🔴 AO VIVO</span>`;
       } else {
         scoreBlock = `<span class="today-score-ph">${isToday||isPast ? '— × —' : m.time}</span>`;
@@ -2401,7 +2420,7 @@ function renderTodayTab() {
           : `<span class="tv-badge ${ch.cls}">📺 ${ch.name}</span>`
       ).join('');
 
-      html += `<div class="today-match${isBr?' br-match':''}${showLive?' live-match':''}">
+      html += `<div class="today-match${isBr?' br-match':''}${isLive?' live-match':''}">
         <div class="today-match-meta">
           <span class="today-time">🕐 ${m.time}</span>
           <span class="today-comp">${m.label}</span>
