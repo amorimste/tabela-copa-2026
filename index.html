@@ -364,7 +364,7 @@ main{
 .standings-table tr.pos-1 td{background:rgba(10,172,220,.1)}
 .standings-table tr.pos-2 td{background:rgba(0,166,81,.08)}
 .standings-table tr.pos-3 td{background:rgba(242,103,34,.07)}
-.team-cell{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.team-cell{display:flex;align-items:center;gap:6px;white-space:normal;flex-wrap:wrap}
 .pos-badge{
   width:20px;height:20px;border-radius:3px;
   display:flex;align-items:center;justify-content:center;
@@ -412,7 +412,7 @@ main{
 .team-side.home{justify-content:flex-end}
 .team-side.away{justify-content:flex-start}
 .team-flag-big{font-size:1.8rem;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;line-height:1;flex-shrink:0}
-.team-name-text{font-size:.85rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.team-name-text{font-size:.85rem;font-weight:600;color:#fff;white-space:normal;word-break:break-word;min-width:0}
 .score-area{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .score-input{
   width:40px;height:36px;
@@ -1361,7 +1361,7 @@ function renderGroupCard(gk) {
 
   // Tabela de classificação
   h += `<table class="standings-table"><thead><tr>
-    <th style="min-width:130px">Seleção</th>
+    <th>Seleção</th>
     <th title="Pontos">P</th><th title="Jogos">J</th>
     <th title="Vitórias">V</th><th title="Empates">E</th><th title="Derrotas">D</th>
     <th title="Gols Pró">GP</th><th title="Gols Contra">GC</th><th title="Saldo">SG</th>
