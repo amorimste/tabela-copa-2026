@@ -2094,8 +2094,13 @@ const ESPN_NAME_MAP = {
   'Spain':'Espanha','Cape Verde':'Cabo Verde','Saudi Arabia':'Arábia Saudita','Uruguay':'Uruguai',
   'France':'França','Senegal':'Senegal','Norway':'Noruega','Iraq':'Iraque',
   'Argentina':'Argentina','Algeria':'Argélia','Austria':'Áustria','Jordan':'Jordânia',
-  'Portugal':'Portugal','Uzbekistan':'Uzbequistão','Colombia':'Colômbia','DR Congo':'RD Congo',
+  'Portugal':'Portugal','Uzbekistan':'Uzbequistão','Colombia':'Colômbia','DR Congo':'RD Congo','Congo DR':'RD Congo',
   'England':'Inglaterra','Croatia':'Croácia','Ghana':'Gana','Panama':'Panamá',
+  'Bosnia and Herzegovina':'Bósnia-Herzegovina','Bosnia-Herzegovina':'Bósnia-Herzegovina',
+  'Ivory Coast':'Costa do Marfim',"Côte d'Ivoire":'Costa do Marfim',
+  'United States':'Estados Unidos','USA':'Estados Unidos',
+  'South Korea':'Coreia do Sul','Korea Republic':'Coreia do Sul',
+  'Czech Republic':'Rep. Tcheca','Czechia':'Rep. Tcheca',
 };
 
 let _liveData = {};
@@ -2422,7 +2427,7 @@ function renderTodayTab() {
         scoreBlock = `<span class="today-score-box">${r.home} × ${r.away}${liveTag}</span>`;
       } else if (isLive && hasEspn) {
         // AO VIVO — placar em tempo real da ESPN
-        const clk = live.clock ? `<small style="font-size:.65em;opacity:.8;margin-left:4px">${live.clock}'</small>` : '';
+        const clk = live.clock ? `<small style="font-size:.65em;opacity:.8;margin-left:4px">${live.clock}</small>` : '';
         scoreBlock = `<span class="today-score-box live-score">🔴 ${live.homeScore} × ${live.awayScore}${clk}</span>`;
       } else if (isDone && hasEspn) {
         // Encerrado — ESPN confirma o placar final (antes de salvar/seedar)
