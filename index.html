@@ -1641,6 +1641,18 @@ const SEED_KO_RESULTS = {
             winner:'França', ext:'', pen:'' },
   R32_7: { home:2, away:0, homeTeam:'México', awayTeam:'Equador',
             winner:'México', ext:'', pen:'' },
+  // 01/07 Qua
+  R32_8:  { home:2, away:1, homeTeam:'Inglaterra', awayTeam:'RD Congo',
+             winner:'Inglaterra', ext:'', pen:'' },
+  R32_10: { home:3, away:2, homeTeam:'Bélgica', awayTeam:'Senegal',
+             winner:'Bélgica', ext:'ET', pen:'' },
+  R32_9:  { home:2, away:0, homeTeam:'Estados Unidos', awayTeam:'Bósnia-Herzegovina',
+             winner:'Estados Unidos', ext:'', pen:'' },
+  // 02/07 Qui
+  R32_12: { home:3, away:0, homeTeam:'Espanha', awayTeam:'Áustria',
+             winner:'Espanha', ext:'', pen:'' },
+  R32_11: { home:2, away:1, homeTeam:'Portugal', awayTeam:'Croácia',
+             winner:'Portugal', ext:'', pen:'' },
 };
 
 function seedKoResults() {
@@ -2246,17 +2258,20 @@ async function syncHistoricalScores() {
 
 async function fetchLiveScores() {
   try {
-    // Sempre usa a data de hoje para garantir que pega os jogos corretos
-    const now = new Date();
-    const ds = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
-    const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${ds}&limit=20`;
-    const r = await fetch(url, {cache:'no-cache'});
-    if (!r.ok) return;
-    const data = await r.json();
-    const events = data.events || [];
-    const newLive = {};
+    const fmtDate = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    const now  = new Date();
+    const prev = new Date(now); prev.setDate(prev.getDate() - 1);
+    // Busca hoje + ontem em paralelo: captura jogos 00h BRT que no ESPN ficam no dia anterior (EDT)
+    const [r1, r2] = await Promise.all([
+      fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmtDate(now)}&limit=20`, {cache:'no-cache'}),
+      fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmtDate(prev)}&limit=20`, {cache:'no-cache'}),
+    ]);
+    const allEvents = [];
+    if (r1.ok) { const d = await r1.json(); allEvents.push(...(d.events||[])); }
+    if (r2.ok) { const d = await r2.json(); allEvents.push(...(d.events||[])); }
 
-    events.forEach(ev => {
+    const newLive = {};
+    allEvents.forEach(ev => {
       const comp = ev.competitions && ev.competitions[0];
       if (!comp) return;
       const st    = comp.status && comp.status.type;
@@ -2269,11 +2284,10 @@ async function fetchLiveScores() {
       if (!homePt || !awayPt) return;
       const homeScore = parseInt(homeC.score);
       const awayScore = parseInt(awayC.score);
-      const state     = st && st.state;           // 'pre' | 'in' | 'post'
+      const state     = st && st.state;
       const completed = !!(st && st.completed);
       const detail    = (st && st.shortDetail) || '';
       const clock     = (comp.status && comp.status.displayClock) || '';
-      // Guarda por ambas as ordens para facilitar lookup
       const entry = {homeScore,awayScore,state,completed,homeTeam:homePt,awayTeam:awayPt,clock,detail};
       newLive[`${homePt}|${awayPt}`] = entry;
       newLive[`${awayPt}|${homePt}`] = {...entry, homeScore:awayScore, awayScore:homeScore, homeTeam:awayPt, awayTeam:homePt};
@@ -2282,7 +2296,7 @@ async function fetchLiveScores() {
     _liveData = newLive;
     _lastFetch = new Date();
 
-    const anyNew = _processEspnEvents(events);
+    const anyNew = _processEspnEvents(allEvents);
     if (anyNew) { saveState(); refreshAll(); renderBracketView(); }
 
     const activeTab = document.querySelector('.tab-content.active');
@@ -2629,8 +2643,9 @@ function renderBracketView() {
 
   // Labels
   h += lbl(Lx.r32,'R32') + lbl(Lx.oit,'OITAVAS') + lbl(Lx.qrt,'QUARTAS') + lbl(Lx.semi,'SEMI');
-  h += lbl(CX,'⚽ FINAL');
+  h += lbl(CX,'FINAL');
   h += lbl(Rx.semi,'SEMI') + lbl(Rx.qrt,'QUARTAS') + lbl(Rx.oit,'OITAVAS') + lbl(Rx.r32,'R32');
+
 
   // Left — cards
   L32.forEach((id,i)  => { h += mCard(id, Lx.r32,  yt(r32yc(i)));  });
