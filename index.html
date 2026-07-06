@@ -207,26 +207,6 @@ header{
 /* ══════════════════════════════════════════
    BRASIL BANNER
 ══════════════════════════════════════════ */
-.brasil-banner{
-  background:linear-gradient(135deg,#011A08,#012E0F 50%,#011A08);
-  border:1px solid rgba(61,170,86,.35);
-  border-left:4px solid var(--vivid-g);
-  border-radius:0 12px 12px 0;
-  margin:14px clamp(12px,3vw,56px);
-  padding:clamp(12px,1.5vw,18px) clamp(16px,2vw,28px);
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-  position:relative;overflow:hidden;
-  box-shadow:0 2px 20px rgba(0,166,81,.12);
-}
-.brasil-banner::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(0,166,81,.08) 0%,transparent 60%);
-  pointer-events:none;
-}
-.brasil-banner .bl-flag{font-size:2.6rem;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-.brasil-banner .bl-label{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--vivid-g);letter-spacing:2px}
-.brasil-banner .bl-info{color:var(--gray-light);font-size:.88rem;line-height:1.6}
-.brasil-banner .bl-info strong{color:#fff}
 
 /* ══════════════════════════════════════════
    NAV
@@ -394,11 +374,6 @@ main{
 }
 .match-row:last-child{border-bottom:none}
 .match-row:hover{background:rgba(255,255,255,.03)}
-.match-row.brasil-match{
-  border-left:3px solid var(--vivid-g);
-  padding-left:10px;
-  background:rgba(0,166,81,.05);
-}
 .match-dt{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .match-dt-text{font-size:.68rem;color:var(--gray-mid)}
 .match-city-tag{
@@ -640,11 +615,6 @@ main{
 }
 .today-match:hover{border-color:rgba(255,255,255,.18)}
 .today-match:hover::before{opacity:1}
-.today-match.br-match{
-  border-color:rgba(0,166,81,.3);
-  background:rgba(0,166,81,.06);
-}
-.today-match.br-match::before{opacity:1;background:linear-gradient(180deg,var(--vivid-g),var(--gold))}
 .today-match-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
 .today-time{color:var(--electric);font-size:.78rem;font-weight:800;letter-spacing:1px}
 .today-comp{
@@ -837,13 +807,6 @@ main{
   <div class="header-colorbar"></div>
 </header>
 
-<div class="brasil-banner">
-  <span class="fi fi-br" style="font-size:2.4rem;border-radius:4px;vertical-align:middle;display:inline-block;flex-shrink:0"></span>
-  <div>
-    <div class="bl-label">PRÓXIMO JOGO DO BRASIL</div>
-    <div class="bl-info" id="brasilNextMatch">Carregando…</div>
-  </div>
-</div>
 
 <nav>
   <button class="nav-btn" onclick="showTab('hoje',this)">📅 Hoje</button>
@@ -1403,10 +1366,10 @@ function renderGroupCard(gk) {
     if(!ms.length) return;
     h += `<div class="matches-section"><div class="matches-section-title">Rodada ${round}</div>`;
     ms.forEach(m => {
-      const isBr = m.home==='Brasil'||m.away==='Brasil';
+
       const r = results[m.id];
       const hasR = r && r.home !== undefined && r.away !== undefined;
-      h += `<div class="match-row${isBr?' brasil-match':''}">
+      h += `<div class="match-row">
         <div class="match-dt">
           <span class="match-dt-text">📅 ${m.date} &nbsp;🕐 ${m.time}</span>
           <span class="match-city-tag">📍 ${m.city}</span>
@@ -1653,13 +1616,25 @@ const SEED_KO_RESULTS = {
              winner:'Espanha', ext:'', pen:'' },
   R32_11: { home:2, away:1, homeTeam:'Portugal', awayTeam:'Croácia',
              winner:'Portugal', ext:'', pen:'' },
+  // 03/07 Sex (00h BRT = 02/07 EDT na ESPN)
+  R32_13: { home:2, away:0, homeTeam:'Suíça', awayTeam:'Argélia',
+             winner:'Suíça', ext:'', pen:'' },
+  // 03/07 Sex
+  R32_16: { home:1, away:1, homeTeam:'Austrália', awayTeam:'Egito',
+             winner:'Egito', ext:'ET', pen:'2-4' },
+  R32_14: { home:3, away:2, homeTeam:'Argentina', awayTeam:'Cabo Verde',
+             winner:'Argentina', ext:'ET', pen:'' },
+  R32_15: { home:1, away:0, homeTeam:'Colômbia', awayTeam:'Gana',
+             winner:'Colômbia', ext:'', pen:'' },
 };
 
 function seedKoResults() {
   let added = 0;
   Object.entries(SEED_KO_RESULTS).forEach(([id, r]) => {
-    // Força atualização se o resultado salvo não tem vencedor mas o seed tem
-    if (!koResults[id] || (!koResults[id].winner && r.winner)) {
+    const cur = koResults[id];
+    // Aplica seed se: não existe, não tem vencedor, não tem homeTeam, ou placar diferente do seed
+    if (!cur || !cur.winner || !cur.homeTeam ||
+        (cur.home !== r.home || cur.away !== r.away)) {
       koResults[id] = r; added++;
     }
   });
@@ -2423,8 +2398,6 @@ function renderTodayTab() {
     dayData.matches.forEach(m => {
       const r  = m.type==='group' ? results[m.id] : koResults[m.id];
       const hasR = r && r.home !== undefined && r.away !== undefined;
-      const isBr = m.home==='Brasil' || m.away==='Brasil';
-
       // Verificar dados ao vivo da ESPN
       const live = getLiveInfo(m.home, m.away);
       const isLiveNow = isToday && isMatchLiveNow(m.time, dayData.d);
@@ -2463,7 +2436,7 @@ function renderTodayTab() {
           : `<span class="tv-badge ${ch.cls}">📺 ${ch.name}</span>`
       ).join('');
 
-      html += `<div class="today-match${isBr?' br-match':''}${isLive?' live-match':''}">
+      html += `<div class="today-match${isLive?' live-match':''}">
         <div class="today-match-meta">
           <span class="today-time">🕐 ${m.time}</span>
           <span class="today-comp">${m.label}</span>
@@ -2686,7 +2659,6 @@ function renderBracketView() {
 // ─────────────────────────────────────────────
 function refreshAll() {
   renderGroups();
-  updateBrasilBanner();
   updatePhaseIndicator();
   const activeTab = document.querySelector('.tab-content.active');
   if (activeTab) {
