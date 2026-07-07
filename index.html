@@ -2014,6 +2014,7 @@ function findBrasilKoMatch() {
 
 function updateBrasilBanner() {
   const el = document.getElementById('brasilNextMatch');
+  if (!el) return;
   const brMs = GROUP_MATCHES.filter(m=>m.home==='Brasil'||m.away==='Brasil');
   const nextGroup = brMs.find(m=>!results[m.id]);
   if (nextGroup) {
