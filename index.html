@@ -1657,7 +1657,10 @@ const SEED_KO_RESULTS = {
 };
 
 function seedKoResults() {
-  // Seed é verdade absoluta para todos os resultados confirmados — sempre sobrescreve
+  // Limpa TODOS os dados KO do localStorage antes de re-semear.
+  // Isso remove qualquer resultado obsoleto ou incorreto de versões anteriores.
+  Object.keys(koResults).forEach(k => delete koResults[k]);
+  // Semeia apenas os resultados 100% confirmados
   Object.entries(SEED_KO_RESULTS).forEach(([id, r]) => {
     koResults[id] = r;
   });
