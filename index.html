@@ -1575,11 +1575,11 @@ const SEED_GROUP_RESULTS = {
 };
 
 function seedResults() {
-  let added = 0;
+  // Seed é verdade absoluta — sempre sobrescreve para garantir dados corretos
   Object.entries(SEED_GROUP_RESULTS).forEach(([id, r]) => {
-    if (!results[id]) { results[id] = r; added++; }
+    results[id] = r;
   });
-  if (added > 0) { saveState(); }
+  saveState();
 }
 
 // ─────────────────────────────────────────────
@@ -1642,19 +1642,26 @@ const SEED_KO_RESULTS = {
             winner:'Espanha', ext:'', pen:'' },
   OIT_6: { home:1, away:4, homeTeam:'Estados Unidos', awayTeam:'Bélgica',
             winner:'Bélgica', ext:'', pen:'' },
+  // 07/07 Ter
+  OIT_7: { home:3, away:2, homeTeam:'Argentina', awayTeam:'Egito',
+            winner:'Argentina', ext:'', pen:'' },
+  OIT_8: { home:0, away:0, homeTeam:'Suíça', awayTeam:'Colômbia',
+            winner:'Suíça', ext:'ET', pen:'4-3' },
+  // ── QUARTAS DE FINAL ──
+  // 09/07 Qui
+  QRT_1: { home:0, away:2, homeTeam:'Marrocos', awayTeam:'França',
+            winner:'França', ext:'', pen:'' },
+  // 10/07 Sex
+  QRT_2: { home:2, away:1, homeTeam:'Espanha', awayTeam:'Bélgica',
+            winner:'Espanha', ext:'', pen:'' },
 };
 
 function seedKoResults() {
-  let added = 0;
+  // Seed é verdade absoluta para todos os resultados confirmados — sempre sobrescreve
   Object.entries(SEED_KO_RESULTS).forEach(([id, r]) => {
-    const cur = koResults[id];
-    // Aplica seed se: não existe, não tem vencedor, não tem homeTeam, ou placar diferente do seed
-    if (!cur || !cur.winner || !cur.homeTeam ||
-        (cur.home !== r.home || cur.away !== r.away)) {
-      koResults[id] = r; added++;
-    }
+    koResults[id] = r;
   });
-  if (added > 0) { saveState(); }
+  saveState();
 }
 
 // ─────────────────────────────────────────────
@@ -2159,7 +2166,7 @@ function _processEspnEvents(events) {
       if (ph_hn && !ph_an && (an===homePt||an===awayPt)) return true;
       return false;
     });
-    if (km && !koResults[km.id]) {
+    if (km && (!koResults[km.id] || !koResults[km.id].winner)) {
       const hn_r = koTeamName(km.id,'home',km.hl);
       // rev: true se o time que é "home" no nosso app aparece como "away" na ESPN
       const rev = (!isPlaceholder(hn_r) && hn_r === awayPt)
@@ -2208,38 +2215,36 @@ function _processEspnEvents(events) {
   return anyNew;
 }
 
-// Busca resultados históricos da fase de grupos (11 a 27 de junho)
+// Busca resultados de todas as datas da Copa — fase de grupos + mata-mata até hoje
 async function syncHistoricalScores() {
   if (_syncDone) return;
   const banner = document.getElementById('syncBanner');
   if (banner) banner.style.display = 'flex';
-  const groupResultsCount = Object.keys(results).length;
-  // Só faz a busca se tiver poucos resultados salvos
-  if (groupResultsCount >= 60) {
-    _syncDone = true;
-    if (banner) banner.style.display = 'none';
-    return;
-  }
-  // Datas da fase de grupos: 11/06 a 28/06
+
   const fetchDate = async (dateStr) => {
     try {
-      const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${dateStr}&limit=20`;
-      const r = await fetch(url, {cache:'no-cache'});
-      if (!r.ok) return [];
-      const data = await r.json();
-      return data.events || [];
+      const r = await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${dateStr}&limit=20`, {cache:'no-cache'});
+      return r.ok ? (await r.json()).events || [] : [];
     } catch(e) { return []; }
   };
+
+  // Gera todas as datas desde o início da Copa (11/06) até hoje
+  const start = new Date(2026, 5, 11); // 11 junho 2026
+  const today = new Date();
   const dates = [];
-  for (let d = 11; d <= 28; d++) {
-    dates.push(`202606${d < 10 ? '0'+d : d}`);
+  for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    dates.push(`${y}${m}${dd}`);
   }
-  // Busca em paralelo (4 por vez para não sobrecarregar)
+
+  // Busca em paralelo (4 por vez)
   let anyNew = false;
   for (let i = 0; i < dates.length; i += 4) {
     const batch = dates.slice(i, i+4);
-    const results_batch = await Promise.all(batch.map(fetchDate));
-    results_batch.forEach(events => {
+    const batched = await Promise.all(batch.map(fetchDate));
+    batched.forEach(events => {
       if (_processEspnEvents(events)) anyNew = true;
     });
   }
@@ -2251,16 +2256,16 @@ async function syncHistoricalScores() {
 async function fetchLiveScores() {
   try {
     const fmtDate = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-    const now  = new Date();
-    const prev = new Date(now); prev.setDate(prev.getDate() - 1);
-    // Busca hoje + ontem em paralelo: captura jogos 00h BRT que no ESPN ficam no dia anterior (EDT)
-    const [r1, r2] = await Promise.all([
-      fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmtDate(now)}&limit=20`, {cache:'no-cache'}),
-      fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmtDate(prev)}&limit=20`, {cache:'no-cache'}),
-    ]);
-    const allEvents = [];
-    if (r1.ok) { const d = await r1.json(); allEvents.push(...(d.events||[])); }
-    if (r2.ok) { const d = await r2.json(); allEvents.push(...(d.events||[])); }
+    const now = new Date();
+    // Busca hoje + últimos 6 dias. Cada requisição tem fallback individual para não quebrar Promise.all
+    const safeGet = async (url) => {
+      try { const r = await fetch(url, {cache:'no-cache'}); return r.ok ? await r.json() : {}; }
+      catch(e) { return {}; }
+    };
+    const days = [];
+    for (let i = 0; i <= 6; i++) { const d = new Date(now); d.setDate(d.getDate()-i); days.push(fmtDate(d)); }
+    const jsons = await Promise.all(days.map(dt => safeGet(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${dt}&limit=20`)));
+    const allEvents = jsons.flatMap(j => j.events || []);
 
     const newLive = {};
     allEvents.forEach(ev => {
@@ -2677,32 +2682,29 @@ function renderBracketView() {
 function refreshAll() {
   renderGroups();
   updatePhaseIndicator();
+  // Sempre re-renderiza todas as seções de mata-mata (dados podem ter mudado)
+  renderKoRound('r32','r32Container');
+  renderKoRound('oitavas','oitavasContainer');
+  renderKoRound('quartas','quartasContainer');
+  renderKoRound('semis','semisContainer');
+  renderFinalTab();
+  renderBracketView();
+  renderThirds();
   const activeTab = document.querySelector('.tab-content.active');
-  if (activeTab) {
-    switch(activeTab.id) {
-      case 'tab-melhores3':   renderThirds(); break;
-      case 'tab-r32':         renderKoRound('r32','r32Container'); break;
-      case 'tab-oitavas':     renderKoRound('oitavas','oitavasContainer'); break;
-      case 'tab-quartas':     renderKoRound('quartas','quartasContainer'); break;
-      case 'tab-semis':       renderKoRound('semis','semisContainer'); break;
-      case 'tab-final':       renderFinalTab(); break;
-      case 'tab-hoje':        renderTodayTab(); break;
-      case 'tab-chaveamento': renderBracketView(); break;
-    }
-  }
+  if (activeTab && activeTab.id === 'tab-hoje') renderTodayTab();
 }
 
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
 loadState();
-seedResults();       // preenche resultados confirmados da fase de grupos
-seedKoResults();     // preenche resultados confirmados da Rodada de 32
-renderGroups();
+seedResults();       // preenche resultados confirmados da fase de grupos (sempre sobrescreve)
+seedKoResults();     // preenche resultados confirmados do mata-mata (sempre sobrescreve)
+refreshAll();        // renderiza grupos + todas as fases do mata-mata + chaveamento
 updateBrasilBanner();
 updatePhaseIndicator();
-startGlobalPolling();
-syncHistoricalScores(); // complementa com ESPN se tiver mais dados
+startGlobalPolling();        // polling ESPN a cada 3min (últimos 7 dias)
+syncHistoricalScores();      // varredura inicial de todas as datas da Copa
 </script>
 </body>
 </html>
