@@ -2152,11 +2152,16 @@ function _processEspnEvents(events) {
       (m.home === homePt && m.away === awayPt) ||
       (m.home === awayPt && m.away === homePt)
     );
-    if (gm && !results[gm.id]) {
-      const rev = gm.home === awayPt;
-      results[gm.id] = rev ? {home:awayScore,away:homeScore} : {home:homeScore,away:awayScore};
-      _autoSavedIds.add(gm.id);
-      anyNew = true;
+    if (gm) {
+      // Jogo da fase de grupos — atualiza resultado se ainda não salvo e encerra aqui.
+      // NUNCA deve cruzar com slots do mata-mata.
+      if (!results[gm.id]) {
+        const rev = gm.home === awayPt;
+        results[gm.id] = rev ? {home:awayScore,away:homeScore} : {home:homeScore,away:awayScore};
+        _autoSavedIds.add(gm.id);
+        anyNew = true;
+      }
+      return; // impede que jogos de grupos sejam atribuídos a slots do mata-mata
     }
 
     // ── MATA-MATA ──
